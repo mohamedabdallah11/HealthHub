@@ -6,6 +6,8 @@ use App\Http\Requests\LoginRequest;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Client;
+use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -26,8 +28,20 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role
+            'role' => $request->role?? 'client'
         ]);
+
+        if($user->role == 'doctor'){
+            Doctor::create([
+                'user_id' => $user->id
+            ]);
+        }
+        if($user->role == 'client'){
+            Client::create([
+                'user_id' => $user->id
+            ]);
+        }
+    
 
         $data['token'] = $user->createToken('authToken')->plainTextToken;
         $data['name'] = $user->name;
