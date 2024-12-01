@@ -26,6 +26,7 @@ class RegisterRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role'=>['in:doctor,client,admin']
         ];
     }
     public function attributes()
@@ -34,6 +35,13 @@ class RegisterRequest extends FormRequest
             'name' => 'Name',
             'email' => 'Email',
             'password' => 'Password',
+            'role' => 'Role',
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'role.in' => 'Role must be either doctor, client',
         ];
     }
 }

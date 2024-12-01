@@ -26,11 +26,13 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role
         ]);
 
         $data['token'] = $user->createToken('authToken')->plainTextToken;
         $data['name'] = $user->name;
         $data['email'] = $user->email;
+        $data['role'] = $user->role;
 
         return ApiResponse::sendResponse(201, 'User created successfully', $data);
     }
@@ -43,6 +45,7 @@ class AuthController extends Controller
         $data['token'] = $user->createToken('authToken')->plainTextToken;
         $data['name'] = $user->name;
         $data['email'] = $user->email;
+        $data['role'] = $user->role;
 
         return ApiResponse::sendResponse(200, 'User Logged In successfully', $data);
     } else {
