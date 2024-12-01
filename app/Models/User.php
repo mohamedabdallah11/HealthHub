@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models;
+use App\Models\Doctor;
+use App\Models\Client;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -42,4 +45,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function doctor() {
+        return $this->hasOne(Doctor::class);
+    }
+    public function client() {
+        return $this->hasOne(Client::class);
+    }
+
 }
