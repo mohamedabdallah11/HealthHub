@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ClientDoctor extends Model
+class Specialty extends Model
 {
     use HasFactory;
-    protected $fillable = ['client_id', 'doctor_id'];
+    public function doctors(){
+        return $this->belongsToMany(Specialty::class,'doctor_specialty');
+    }
 }
