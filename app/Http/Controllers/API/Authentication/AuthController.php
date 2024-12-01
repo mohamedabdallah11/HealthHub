@@ -5,6 +5,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Models\Client;
 use App\Models\Doctor;
@@ -41,13 +42,16 @@ class AuthController extends Controller
                 'user_id' => $user->id
             ]);
         }
+ 
     
 
-        $data['token'] = $user->createToken('authToken')->plainTextToken;
+      /*   $data['token'] = $user->createToken('authToken')->plainTextToken;
         $data['name'] = $user->name;
         $data['email'] = $user->email;
-        $data['role'] = $user->role;
-
+        $data['role'] = $user->role; */
+        
+        $data=new UserResource($user);
+        $data['token']=$user->createToken('authToken')->plainTextToken;
         return ApiResponse::sendResponse(201, 'User created successfully', $data);
     }
     public function login(LoginRequest $request)
@@ -56,10 +60,14 @@ class AuthController extends Controller
        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
         /** @var \App\Models\User $user **/
         $user = Auth::user();
+        
+      /*   
         $data['token'] = $user->createToken('authToken')->plainTextToken;
         $data['name'] = $user->name;
         $data['email'] = $user->email;
-        $data['role'] = $user->role;
+        $data['role'] = $user->role; */
+        $data=new UserResource($user);
+        $data['token']=$user->createToken('authToken')->plainTextToken;
 
         return ApiResponse::sendResponse(200, 'User Logged In successfully', $data);
     } else {
