@@ -24,19 +24,29 @@ class ProfileUpdateRequest extends FormRequest
         return [
             'name' => [ 'required','string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $this->user()->id],
-            'bio' => ['nullable', 'string'],
-            'phone' => ['nullable', 'string'],
+            'phone' => ['nullable', 'string', 'unique:users,phone,'. $this->user()->id],
             'governorate' => ['nullable', 'string'],
+            'gender' => ['nullable', 'string','in:male,female'],
+            'age' => ['nullable', 'integer','min:0'],
+            //for doctors
             'experience_year' => ['nullable', 'integer','min:0'],
             'fees' => ['nullable', 'numeric','min:0'],
+            'bio' => ['nullable', 'string'],
+            //for clients
             'notes' => ['nullable', 'string'],
             'medical_history' => ['nullable', 'string'],
+            'blood_type' => ['nullable', 'string'],
+            'weight' => ['nullable', 'integer','min:0'],
+            'height' => ['nullable', 'integer','min:0'],
+
         ];
         }
         public function messages(): array
         {
             return [
                 'email.unique' => 'The email has already been taken.',
+                'phone.unique' => 'Phone number already exists',
+
             ];
         }
         public function attributes(): array

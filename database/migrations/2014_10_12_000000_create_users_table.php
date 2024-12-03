@@ -22,6 +22,11 @@ return new class extends Migration
             $table->timestamps();
             $table->string('governorate')->nullable();
             $table->string('phone')->nullable()->unique(); 
+            $table->integer('age')->nullable();
+            $table->enum('gender',['male','female'])->nullable();
+            $table->string(column: 'address')->nullable();
+           
+
         });
     }
 
