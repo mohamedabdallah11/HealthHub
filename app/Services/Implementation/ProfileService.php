@@ -29,7 +29,7 @@ class ProfileService implements ProfileServiceInterface
         if ($user->role == 'doctor') {
             $user->doctor->update($request->only(['bio', 'experience_year', 'fees']));
         } elseif ($user->role == 'client') {
-            $user->client->update($request->only(['notes', 'medical_history']));
+            $user->client->update($request->only(['notes', 'medical_history','blood_type','weight','height']));
         }
 
         return ApiResponse::sendResponse(200, 'Profile updated successfully', new ProfileResource($user));

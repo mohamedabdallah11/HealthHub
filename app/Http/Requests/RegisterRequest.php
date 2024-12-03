@@ -26,9 +26,12 @@ class RegisterRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role'=>['in:doctor,client,admin'],
-            /* 'phone' => ['nullable', 'string'],
-            'governorate' => ['nullable', 'string'], */
+            'role'=>['required','in:doctor,client,admin'],
+            'phone' => ['nullable', 'string', 'unique:users,phone'],
+            'governorate' => ['nullable', 'string'], 
+            'gender' => ['nullable', 'string','in:male,female'],
+            'age' => ['nullable', 'integer','min:0'],
+            
         ];
     }
     public function attributes()
@@ -38,14 +41,20 @@ class RegisterRequest extends FormRequest
             'email' => 'Email',
             'password' => 'Password',
             'role' => 'Role',
-            /* 'phone' => 'Phone',
-            'governorate' => 'Governorate', */
+            'phone' => 'Phone',
+            'governorate' => 'Governorate', 
+            'gender' => 'Gender',
+            
         ];
     }
     public function messages()
     {
         return [
             'role.in' => 'Role must be either doctor, client',
+            'gender.in' => 'Gender must be either male or female',
+            'age.integer' => 'Age must be a number',
+            'age.min' => 'Age must be at least 0',
+            'phone.unique' => 'Phone number already exists',
         ];
     }
 }

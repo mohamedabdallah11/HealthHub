@@ -12,6 +12,10 @@ class Client extends Model
         'user_id',
         'notes',
         'medical_history',
+        'blood_type',
+        'weight',
+        'height',
+        
     ];
     use HasFactory;
 public function user (){

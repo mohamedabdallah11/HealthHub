@@ -16,6 +16,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->text('notes')->nullable();
             $table->string('medical_history')->nullable();
+            $table->string('blood_type')->nullable();
+            $table->integer('weight')->nullable();
+            $table->integer(column: 'height')->nullable();
             $table->timestamps();
         });
     }
