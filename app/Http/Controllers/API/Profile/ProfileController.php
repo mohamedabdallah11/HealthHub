@@ -17,13 +17,12 @@ class ProfileController extends Controller
     protected  $profileService;
     public function __construct(ProfileServiceInterface $profileService)
     {
-        $this->middleware('auth:sanctum');
         $this->profileService = $profileService;
     }
 
     public function show()
     {
-    /**
+    /** 
    * @var User $user
    */
   
