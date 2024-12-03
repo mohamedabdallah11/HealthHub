@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table ->text('bio')->nullable();
-            $table->integer('experinece_year')->nullable();
+            $table->integer('experience_year')->nullable();
             $table->decimal('fees',8,2)->nullable(); 
             $table->timestamps();
         });

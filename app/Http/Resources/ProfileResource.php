@@ -19,7 +19,8 @@ class ProfileResource extends JsonResource
             'email' => $this->email,
             'role' => $this->role,
             'phone' => $this->phone,
-            'governorate' => $this->governorate
+            'governorate' => $this->governorate,
+            'id' => $this->id
         ];
 
         if ($this->role == 'doctor') {
