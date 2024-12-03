@@ -21,7 +21,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->string('governorate')->nullable();
-            $table->string('phone')->nullable(); 
+            $table->string('phone')->nullable()->unique(); 
         });
     }
 
