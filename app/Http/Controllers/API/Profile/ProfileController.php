@@ -9,48 +9,38 @@ use App\Http\Resources\ProfileResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-
+use App\Services\Abstract\ProfileServiceInterface;
+use App\Services\Implementation\ProfileService;
 
 class ProfileController extends Controller
 {
-    public function __construct()
+    protected  $profileService;
+    public function __construct(ProfileServiceInterface $profileService)
     {
         $this->middleware('auth:sanctum');
+        $this->profileService = $profileService;
     }
 
     public function show()
     {
-        $user= Auth::user();
-        if(!$user)
-        {
-            return ApiResponse::sendResponse(404,'User not found',[]);
-        }
-        return ApiResponse::sendResponse(200,'User profile fetched successfully',new ProfileResource($user));
-    }
-    public function update(ProfileUpdateRequest $request)
-    {
-
-
-         $user = Auth::user(); 
-         
-        if (!$user) {
-            return ApiResponse::sendResponse(404, 'User not found', []);
-        }
-   /**
- * @var \App\Models\User $user
- */
-        $user->update($request->validated());
-
+    /**
+   * @var User $user
+   */
   
+    $user = Auth::user();
+    return $this->profileService->showProfile($user);
 
-        if ($user->role == 'doctor') {
-                    $user->doctor->update($request->only(['bio', 'experience_year', 'fees']));
-                } elseif ($user->role == 'client') {
-                    $user->client->update($request->only(['notes', 'medical_history'])); 
-                }
-                return ApiResponse::sendResponse(200,'Profile updated successfully',new ProfileResource($user));
- 
 
+}
+    public function update(ProfileUpdateRequest $request)
+    {   
+        
+        /**
+       * @var User $user
+       */
+      
+        $user = Auth::user();
+        return $this->profileService->updateProfile($request, $user);
 
 }
 
