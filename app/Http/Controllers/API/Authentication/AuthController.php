@@ -29,7 +29,10 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role?? 'client'
+            'role' => $request->role?? 'client',
+           /*  'phone' => $this->phone,
+            'governorate' => $this->governorate, */
+            
         ]);
 
         if($user->role == 'doctor'){

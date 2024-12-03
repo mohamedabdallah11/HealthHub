@@ -26,7 +26,9 @@ class RegisterRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role'=>['in:doctor,client,admin']
+            'role'=>['in:doctor,client,admin'],
+            /* 'phone' => ['nullable', 'string'],
+            'governorate' => ['nullable', 'string'], */
         ];
     }
     public function attributes()
@@ -36,6 +38,8 @@ class RegisterRequest extends FormRequest
             'email' => 'Email',
             'password' => 'Password',
             'role' => 'Role',
+            /* 'phone' => 'Phone',
+            'governorate' => 'Governorate', */
         ];
     }
     public function messages()
