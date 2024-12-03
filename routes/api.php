@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Profile\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Authentication;
@@ -19,4 +20,11 @@ Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('/register', 'register');
     Route::post('/login', 'login');
     Route::post('/logout', 'logout')->middleware('auth:sanctum');
+});
+Route::middleware('auth:sanctum')->prefix('profile')->group(function () {
+    Route::get('/show', [ProfileController::class, 'show']);
+    Route::put('/update', [ProfileController::class, 'update']);
+
+
+    
 });
