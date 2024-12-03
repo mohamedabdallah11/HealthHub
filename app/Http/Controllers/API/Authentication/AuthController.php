@@ -5,6 +5,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Models\Client;
@@ -77,4 +78,5 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
         return ApiResponse::sendResponse(200, 'User Logged out Successfully', []);
     }
+ 
 }
