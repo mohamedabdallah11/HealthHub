@@ -47,11 +47,6 @@ class AuthController extends Controller
         }
  
     
-
-      /*   $data['token'] = $user->createToken('authToken')->plainTextToken;
-        $data['name'] = $user->name;
-        $data['email'] = $user->email;
-        $data['role'] = $user->role; */
         
         $data=new UserResource($user);
         $data['token']=$user->createToken('authToken')->plainTextToken;
@@ -64,11 +59,7 @@ class AuthController extends Controller
         /** @var \App\Models\User $user **/
         $user = Auth::user();
         
-      /*   
-        $data['token'] = $user->createToken('authToken')->plainTextToken;
-        $data['name'] = $user->name;
-        $data['email'] = $user->email;
-        $data['role'] = $user->role; */
+    
         $data=new UserResource($user);
         $data['token']=$user->createToken('authToken')->plainTextToken;
 
