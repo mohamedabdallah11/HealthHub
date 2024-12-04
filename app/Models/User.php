@@ -29,6 +29,8 @@ class User extends Authenticatable
         'age',
         'gender',
         'address',
+        'provider_id',
+        'provider_type',
   
         
         

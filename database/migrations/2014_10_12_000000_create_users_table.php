@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->enum('role',['doctor','client','admin'])->default('client');
+            $table->string('provider_id')->nullable();
+            $table->string('provider_type')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
@@ -25,6 +27,7 @@ return new class extends Migration
             $table->integer('age')->nullable();
             $table->enum('gender',['male','female'])->nullable();
             $table->string(column: 'address')->nullable();
+            
            
 
         });

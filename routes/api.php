@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Authentication;
 use App\Http\Controllers\Api\Authentication\AuthController;
+use App\Http\Controllers\Api\Authentication\socialiteAuthenticationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +26,9 @@ Route::middleware('auth:sanctum')->prefix('profile')->group(function () {
     Route::get('/show', [ProfileController::class, 'show']);
     Route::put('/update', [ProfileController::class, 'update']);
     Route::put('/changePassword', [ProfileController::class, 'changePassword']);
+});
+Route::controller(socialiteAuthenticationController::class)->prefix('auth')->group(function () {
+    Route::get('/google','redirectToGoogle');
+    Route::get('/google/callback','handleGoogleCallback');
+    
 });

@@ -122,7 +122,12 @@
                     <div class="text-center text-sm sm:text-left">
                         &nbsp;
                     </div>
-
+                    {{-- 
+                    its just for testing purposes
+                     --}}
+                    <a href="/api/auth/google" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+                        <strong>Google login <strong>></strong>
+                    </a>
                     <div class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-right sm:ml-0">
                         Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
                     </div>
