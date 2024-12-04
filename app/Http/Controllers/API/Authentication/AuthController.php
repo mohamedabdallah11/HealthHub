@@ -55,14 +55,20 @@ class AuthController extends Controller
         $data['token']=$user->createToken('authToken')->plainTextToken;
         return ApiResponse::sendResponse(201, 'User created successfully', $data);
     }
-    public function login(LoginRequest $request)
-    {
+    public function login(LoginRequest $request)    
+    {   
+        $credentials = [
+            filter_var($request->email_or_phone, FILTER_VALIDATE_EMAIL) 
+            ? 'email' : 'phone' => $request->email_or_phone,
+            'password' => $request->password,
+        ];
 
-       if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-        /** @var \App\Models\User $user **/
-        $user = Auth::user();
+       if (Auth::attempt($credentials) ) {
+
         
-    
+        /** @var \App\Models\User $user **/
+
+        $user = Auth::user();
         $data=new UserResource($user);
         $data['token']=$user->createToken('authToken')->plainTextToken;
 
