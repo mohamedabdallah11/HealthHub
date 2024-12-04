@@ -14,13 +14,13 @@ use Laravel\Socialite\Facades\Socialite;
 class socialiteAuthenticationController extends Controller
 {  public function redirectToGoogle()
     {
-        return Socialite::driver('google')->stateless()->redirect();
+        return Socialite::driver('google')->redirect();
     }
 
     public function handleGoogleCallback()
     {
         try {
-            $user = Socialite::driver('google')->stateless()->user();
+            $user = Socialite::driver('google')->user();
             $findUser = User::where('provider_id', $user->id)->first();
 
             if ($findUser) {
