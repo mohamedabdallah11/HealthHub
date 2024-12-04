@@ -48,7 +48,9 @@ class ProfileController extends Controller
     {
         /** @var \App\Models\User $user **/
         $user = Auth::user();  
-
+         if($user->provider_type != null)
+            return ApiResponse::sendResponse(400, 'You are not allowed to change your password because you are a logged in using google', []);
+ 
         if (!Hash::check($request->oldPassword, $user->password)) 
             return ApiResponse::sendResponse(400, 'Old password is incorrect', []); 
         $user->update([
