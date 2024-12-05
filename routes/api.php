@@ -6,17 +6,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Authentication;
 use App\Http\Controllers\Api\Authentication\AuthController;
 use App\Http\Controllers\Api\Authentication\socialiteAuthenticationController;
+use App\Http\Controllers\Doctor\AppointmentController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+
+
 Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('/register', 'register');
     Route::post('/login', 'login');
@@ -31,4 +24,8 @@ Route::controller(socialiteAuthenticationController::class)->prefix('auth')->gro
     Route::get('/google','redirectToGoogle');
     Route::get('/google/callback','handleGoogleCallback');
     
+});
+Route::middleware('auth:sanctum')->prefix('doctor')->group(function () {
+    Route::post('/appointments/store', [AppointmentController::class, 'store']);
+    Route::get('/appointments/show', [AppointmentController::class, 'show']);
 });
