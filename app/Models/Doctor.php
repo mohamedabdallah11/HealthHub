@@ -4,7 +4,7 @@ namespace App\Models;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Appointment;
 class Doctor extends Model
 {
     use HasFactory;
