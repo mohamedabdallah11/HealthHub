@@ -123,5 +123,37 @@ class AppointmentController extends Controller
     }
     
 
-  
+    public function destroy($appointmentId)
+    { 
+        $doctor = auth()->user()->doctor;
+        if (!$doctor) {
+            return ApiResponse::sendResponse(401, 'Unauthorized', []);
+        }
+        $appointment = $doctor->appointments()->find($appointmentId);
+        if (!$appointment) {
+            return ApiResponse::sendResponse(404, 'Appointment not found', []);
+        }
+
+        $appointment->delete();
+
+        return ApiResponse::sendResponse(200, 'Appointment deleted successfully', []);
+        
+        }
+    public function deactivate($appointmentId)
+    {
+     
+        $doctor = auth()->user()->doctor;
+        if (!$doctor) {
+            return ApiResponse::sendResponse(401, 'Unauthorized', []);
+        }
+        $appointment = $doctor->appointments()->find($appointmentId);
+
+        if (!$appointment) {
+            return ApiResponse::sendResponse(404, 'Appointment not found', []);
+        }
+    
+        $appointment->update(['is_available' => false]);
+    
+        return ApiResponse::sendResponse(200, 'Appointment deactivated successfully', []);
+    }
 }

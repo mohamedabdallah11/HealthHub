@@ -25,9 +25,10 @@ Route::controller(socialiteAuthenticationController::class)->prefix('auth')->gro
     Route::get('/google/callback','handleGoogleCallback');
     
 });
-Route::middleware('auth:sanctum')->prefix('doctor')->group(function () {
-    Route::post('/appointments/store', [AppointmentController::class, 'store']);
-    Route::get('/appointments/show', [AppointmentController::class, 'show']);
-    Route::put('appointments/update/{appointment}', [AppointmentController::class, 'update']);
-    Route::delete('appointments/destroy/{appointment}', [AppointmentController::class, 'destroy']);
+Route::middleware('auth:sanctum')->prefix('doctor/appointments')->group(function () {
+    Route::post('/store', [AppointmentController::class, 'store']);
+    Route::get('/show', [AppointmentController::class, 'show']);
+    Route::put('/update/{appointment}', [AppointmentController::class, 'update']);
+    Route::delete('/destroy/{appointment}', [AppointmentController::class, 'destroy']);
+    Route::patch('/deactivate/{appointment}', [AppointmentController::class, 'deactivate']);
 });
