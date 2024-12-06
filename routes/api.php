@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Authentication;
 use App\Http\Controllers\Api\Authentication\AuthController;
 use App\Http\Controllers\Api\Authentication\socialiteAuthenticationController;
-use App\Http\Controllers\Doctor\AppointmentController;
+use App\Http\Controllers\Api\Doctor\AppointmentController;
+
 
 
 
@@ -25,7 +26,7 @@ Route::controller(socialiteAuthenticationController::class)->prefix('auth')->gro
     Route::get('/google/callback','handleGoogleCallback');
     
 });
-Route::middleware('auth:sanctum')->prefix('doctor/appointments')->group(function () {
+Route::middleware(['role:doctor','auth:sanctum'])->prefix('doctor/appointments')->group(function () {
     Route::post('/store', [AppointmentController::class, 'store']);
     Route::get('/show', [AppointmentController::class, 'show']);
     Route::put('/update/{appointment}', [AppointmentController::class, 'update']);

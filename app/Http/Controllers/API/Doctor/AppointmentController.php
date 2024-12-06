@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Doctor;
+namespace App\Http\Controllers\Api\Doctor;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AppointmentRequest;
@@ -15,12 +15,7 @@ use App\Helpers\ApiResponse;
 class AppointmentController extends Controller
 {
     public function show()
-    {   
-        $user_role = auth()->user()->role;
-
-        if ($user_role != 'doctor') {
-            return ApiResponse::sendResponse(401, 'Unauthorized', []);
-        }
+    {     
         $doctor = auth()->user()->doctor;   
         if (!$doctor) {
             return ApiResponse::sendResponse(404, 'Doctor not found', []);
@@ -36,11 +31,6 @@ class AppointmentController extends Controller
     
     public function store(AppointmentRequest $request)
     {
-         $user_role = auth()->user()->role;
-        
-        if ($user_role != 'doctor') {
-            return ApiResponse::sendResponse(401, 'Unauthorized', []);
-        }
     
         $doctor_id = auth()->user()->doctor->id; 
         $doctor_name = auth()->user()->name;
