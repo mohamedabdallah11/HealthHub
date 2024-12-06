@@ -28,4 +28,6 @@ Route::controller(socialiteAuthenticationController::class)->prefix('auth')->gro
 Route::middleware('auth:sanctum')->prefix('doctor')->group(function () {
     Route::post('/appointments/store', [AppointmentController::class, 'store']);
     Route::get('/appointments/show', [AppointmentController::class, 'show']);
+    Route::put('appointments/update/{appointment}', [AppointmentController::class, 'update']);
+    Route::delete('appointments/destroy/{appointment}', [AppointmentController::class, 'destroy']);
 });

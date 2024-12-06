@@ -77,4 +77,45 @@ class AppointmentController extends Controller
         return ApiResponse::sendResponse(200, 'Appointment created successfully', $data);
     } 
     
+
+    public function update(AppointmentRequest $request, $appointmentId)
+{
+    $user_role = auth()->user()->role;
+    if ($user_role != 'doctor') {
+        return ApiResponse::sendResponse(401, 'Unauthorized', []);
+    }
+
+    $appointment = Appointment::findOrFail($appointmentId);
+
+    if ($appointment->doctor_id !== auth()->user()->id) {
+        return ApiResponse::sendResponse(403, 'Forbidden', []);
+    }
+
+    $date = $request->date;
+    $start_time = $request->start_time;
+    $end_time = $request->end_time;
+
+    $existingAppointment = Appointment::where('doctor_id', $appointment->doctor_id)
+        ->where('date', $date)
+        ->where(function ($query) use ($start_time, $end_time) {
+            $query->whereBetween('start_time', [$start_time, $end_time])
+                  ->orWhereBetween('end_time', [$start_time, $end_time]);
+        })
+        ->where('id', '!=', $appointmentId)
+        ->exists();
+
+    if ($existingAppointment) {
+        return ApiResponse::sendResponse(400, 'Appointment already exists at this time', []);
+    }
+
+    $appointment->update([
+        'date' => $request->date,
+        'start_time' => $request->start_time,
+        'end_time' => $request->end_time,
+        'session_duration' => $request->session_duration,
+        'is_available' => $request->is_available,
+    ]);
+
+    return ApiResponse::sendResponse(200, 'Appointment updated successfully', new AppointmentResource($appointment));
+}
 }
