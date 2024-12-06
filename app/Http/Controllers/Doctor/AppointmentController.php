@@ -80,12 +80,15 @@ class AppointmentController extends Controller
 
     public function update(AppointmentRequest $request, $appointmentId)
 {
-    $user_role = auth()->user()->role;
-    if ($user_role != 'doctor') {
+ 
+    $doctor = auth()->user()->doctor;
+    if (!$doctor) {
         return ApiResponse::sendResponse(401, 'Unauthorized', []);
     }
-
-    $appointment = Appointment::findOrFail($appointmentId);
+    $appointment = $doctor->appointments()->find($appointmentId);
+    if (!$appointment) {
+        return ApiResponse::sendResponse(404, 'Appointment not found', []);
+    }
 
     if ($appointment->doctor_id !== auth()->user()->id) {
         return ApiResponse::sendResponse(403, 'Forbidden', []);
@@ -117,5 +120,8 @@ class AppointmentController extends Controller
     ]);
 
     return ApiResponse::sendResponse(200, 'Appointment updated successfully', new AppointmentResource($appointment));
-}
+    }
+    
+
+  
 }
