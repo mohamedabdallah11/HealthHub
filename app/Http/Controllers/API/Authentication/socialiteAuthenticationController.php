@@ -31,10 +31,10 @@ class socialiteAuthenticationController extends Controller
                 $newUser = User::create([
                     'name' => $user->name,
                     'email' => $user->email,
-                    'role' => 'client',
                     'provider_id' => $user->id,
                     'provider_type' => 'google',
                     'password' => Hash::make('my-google'),
+                    'role' => 'deactivated',
                 ]);
                 $data = new UserResource($newUser);
                 $data['token'] = $newUser->createToken('authToken')->plainTextToken;
