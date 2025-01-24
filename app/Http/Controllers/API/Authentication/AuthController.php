@@ -53,7 +53,7 @@ class AuthController extends Controller
         
         $data=new UserResource($user);
         $data['token']=$user->createToken('authToken')->plainTextToken;
-        return ApiResponse::sendResponse(201, 'User created successfully', $data);
+        return ApiResponse::sendResponse(201, 'User created successfully', data: $data);
     }
     public function login(LoginRequest $request)    
     {   
