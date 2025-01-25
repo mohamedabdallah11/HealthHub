@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Authentication\AuthController;
 use App\Http\Controllers\Api\Authentication\socialiteAuthenticationController;
 use App\Http\Controllers\Api\Doctor\AppointmentController;
 use App\Http\Controllers\Api\Doctor\DoctorController;
+use App\Http\Controllers\Api\Booking\BookingController;
 
 
 
@@ -43,4 +44,8 @@ Route::middleware(['auth:sanctum','role:client,doctor'])->prefix('Doctor/')->gro
     Route::get('/searchByName', [DoctorController::class, 'searchByName']);
     Route::get('/filterBySpecialty', [DoctorController::class, 'filterBySpecialty']);
 
+});
+Route::middleware(['auth:sanctum','role:client'])->prefix('Booking')->group(function () {
+    Route::post('/bookAppointment', [BookingController::class,'bookAppointment']);
+    Route::patch('/bookAppointment/confirm/{id}', [BookingController::class, 'confirmBooking'])->name('booking.confirm');
 });
