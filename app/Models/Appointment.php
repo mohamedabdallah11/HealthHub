@@ -14,9 +14,13 @@ class Appointment extends Model
         'start_time',
         'end_time',
         'session_duration',
-        'is_available'
+        'is_available',
+        'max_patients'
     ];
     public function doctor(){
         return $this->belongsTo(Doctor::class);
+    }
+    public function bookings(){
+        return $this->hasMany(Booking::class);
     }
 }
