@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\Authentication;
 use App\Http\Controllers\Api\Authentication\AuthController;
 use App\Http\Controllers\Api\Authentication\socialiteAuthenticationController;
 use App\Http\Controllers\Api\Doctor\AppointmentController;
-use App\Http\Controllers\Home\HomeController;
+use App\Http\Controllers\Doctor\DoctorController;
 
 
 
@@ -38,8 +38,8 @@ Route::middleware(['role:doctor','auth:sanctum'])->prefix('doctor/appointments')
     Route::delete('/destroy/{appointment}', [AppointmentController::class, 'destroy']);
     Route::patch('/deactivate/{appointment}', [AppointmentController::class, 'deactivate']);
 });
-Route::middleware(['role:client','auth:sanctum'])->prefix('Home/client')->group(function () {
-    Route::get('/showDoctors', [HomeController::class, 'allDoctors']);
-    Route::get('/showDoctorInfo/{id}', [HomeController::class, 'doctorInformation']);
+Route::middleware(['auth:sanctum','role:client,doctor'])->prefix('Doctor/')->group(function () {
+    Route::get('/allDoctors', [DoctorController::class, 'allDoctors']);
+    Route::get('/showDoctorInfo/{id}', action: [DoctorController::class, 'doctorInformation']);
 
 });
