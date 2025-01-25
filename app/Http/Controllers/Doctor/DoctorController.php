@@ -14,38 +14,60 @@ class DoctorController extends Controller
     public function allDoctors()
     {
         try {
-            
-            $doctors = Doctor::with(['user','specialties'])->get();
 
-            return ApiResponse::sendResponse(200, 'Doctors list fetched successfully.',
-              DoctorResource::collection($doctors));
+            $doctors = Doctor::with(['user', 'specialties'])->get();
+
+            return ApiResponse::sendResponse(
+                200,
+                'Doctors list fetched successfully.',
+                DoctorResource::collection($doctors)
+            );
         } catch (\Exception $e) {
             return ApiResponse::sendResponse(500, 'Failed to fetch dashboard data.', $e->getMessage());
         }
     }
     public function doctorInformation($id)
-    {   
-        
+    {
+
         if (!$doctor = Doctor::find($id)) {
             return ApiResponse::sendResponse(404, 'Doctor not found', []);
         }
-        
-            $doctor = Doctor::with(['user','appointments','specialties'])
+
+        $doctor = Doctor::with(['user', 'appointments', 'specialties'])
             ->where('id', $id)->first();
-            $data=new DoctorInfoResource($doctor);
+        $data = new DoctorInfoResource($doctor);
 
-        if($doctor)
-            return ApiResponse::sendResponse(200, 'Doctors fetched successfully.',
-            $data);
+        if ($doctor)
+            return ApiResponse::sendResponse(
+                200,
+                'Doctors fetched successfully.',
+                $data
+            );
 
 
-            return ApiResponse::sendResponse(500, 'Failed to fetch doctor data.', []);
-        
+        return ApiResponse::sendResponse(500, 'Failed to fetch doctor data.', []);
+
     }
-    public function filterationBySpeciality(){
-        //
+    public function filterBySpecialty(Request $request)
+    {
+        $specialtyId = $request->input('specialty_id');
+    
+        $doctors = Doctor::whereHas('specialties', function ($query) use ($specialtyId) {
+            $query->where('specialties.id', $specialtyId);
+        })->get();
+    
+        return ApiResponse::sendResponse(200, 'Doctors filtered by specialty successfully', DoctorResource::collection($doctors));
     }
-    public function searchByName(){
-        //
+    public function searchByName(Request $request)
+    {
+        if ($request->has('name') && !empty($request->name)) {
+            $doctors = Doctor::whereHas('user', function ($query) use ($request) {
+                $query->where('name', 'LIKE', '%' . $request->name . '%');
+            })->with('specialties', 'appointments')->get();
+
+            return ApiResponse::sendResponse(200, 'Doctors retrieved successfully', DoctorInfoResource::collection($doctors));
+        }
+
+        return ApiResponse::sendResponse(400, 'Name parameter is required', []);
     }
 }

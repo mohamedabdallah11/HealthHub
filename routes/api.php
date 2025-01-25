@@ -41,5 +41,7 @@ Route::middleware(['role:doctor','auth:sanctum'])->prefix('doctor/appointments')
 Route::middleware(['auth:sanctum','role:client,doctor'])->prefix('Doctor/')->group(function () {
     Route::get('/allDoctors', [DoctorController::class, 'allDoctors']);
     Route::get('/showDoctorInfo/{id}', action: [DoctorController::class, 'doctorInformation']);
+    Route::get('/searchByName', [DoctorController::class, 'searchByName']);
+    Route::get('/filterBySpecialty', [DoctorController::class, 'filterBySpecialty']);
 
 });
