@@ -8,8 +8,7 @@ use App\Http\Controllers\Api\Authentication;
 use App\Http\Controllers\Api\Authentication\AuthController;
 use App\Http\Controllers\Api\Authentication\socialiteAuthenticationController;
 use App\Http\Controllers\Api\Doctor\AppointmentController;
-use App\Http\Controllers\Doctor\DoctorController;
-
+use App\Http\Controllers\Api\Doctor\DoctorController;
 
 
 

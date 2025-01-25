@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Doctor;
+namespace App\Http\Controllers\Api\Doctor;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Resources\DoctorResource;
-use App\Models\Doctor;
 use App\Http\Resources\DoctorInfoResource;
+use App\Models\Doctor;
 use App\Helpers\ApiResponse;
+use App\Http\Resources\DoctorResource;
+
+
 
 class DoctorController extends Controller
 {
@@ -56,7 +58,7 @@ class DoctorController extends Controller
             $query->where('specialties.id', $specialtyId);
         })->get();
     
-        return ApiResponse::sendResponse(200, 'Doctors filtered by specialty successfully', DoctorResource::collection($doctors));
+        return ApiResponse::sendResponse(200, 'Doctors filtered by specialty successfully', DoctorInfoResource::collection($doctors));
     }
     public function searchByName(Request $request)
     {
@@ -71,3 +73,4 @@ class DoctorController extends Controller
         return ApiResponse::sendResponse(400, 'Name parameter is required', []);
     }
 }
+
