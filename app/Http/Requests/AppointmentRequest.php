@@ -27,6 +27,7 @@ class AppointmentRequest extends FormRequest
             'end_time' => 'required|date_format:H:i|after:start_time',
             'session_duration' => 'required|integer|min:1',
             'is_available' => 'boolean',
+            "max_patients" => "required|integer|min:1"
         ];
     }
     public function messages()

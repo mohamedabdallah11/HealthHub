@@ -39,6 +39,7 @@ class AppointmentController extends Controller
         $end_time = $request->end_time;
         $session_duration = $request->session_duration;
         $is_available = $request->is_available;
+        $max_patients = $request->max_patients;
     
         $existingAppointment = Appointment::where('doctor_id', $doctor_id)
             ->where('date', $date)
@@ -59,7 +60,8 @@ class AppointmentController extends Controller
             'start_time' => $start_time,
             'end_time' => $end_time,
             'session_duration' => $session_duration,
-            'is_available' => $is_available
+            'is_available' => $is_available,
+            'max_patients'=>$max_patients
         ]);
     
         $data = new AppointmentResource($appointment);
@@ -107,6 +109,7 @@ class AppointmentController extends Controller
         'end_time' => $request->end_time,
         'session_duration' => $request->session_duration,
         'is_available' => $request->is_available,
+        "max_patients" => $request->max_patients
     ]);
 
     return ApiResponse::sendResponse(200, 'Appointment updated successfully', new AppointmentResource($appointment));
