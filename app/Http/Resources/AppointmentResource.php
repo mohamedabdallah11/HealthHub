@@ -22,6 +22,7 @@ class AppointmentResource extends JsonResource
             'end_time' => $this->end_time,
             'session_duration' => $this->session_duration,
             'is_available' => $this->is_available,
+            "max_patients"=> $this->max_patients
         ];
     }
 }
