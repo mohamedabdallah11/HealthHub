@@ -9,7 +9,10 @@ use App\Http\Controllers\Api\Authentication\AuthController;
 use App\Http\Controllers\Api\Authentication\socialiteAuthenticationController;
 use App\Http\Controllers\Api\Doctor\AppointmentController;
 use App\Http\Controllers\Api\Doctor\DoctorController;
+use App\Http\Controllers\Api\Doctor\DoctorBookingMangement;
+
 use App\Http\Controllers\Api\Booking\BookingController;
+
 
 
 
@@ -49,4 +52,7 @@ Route::middleware(['auth:sanctum','role:client'])->prefix('Booking')->group(func
     Route::post('/bookAppointment', [BookingController::class,'bookAppointment']);
     Route::patch('/bookAppointment/confirm/{id}', [BookingController::class, 'confirmBooking']);
     Route::delete('/bookAppointment/cancel/{id}', [BookingController::class, 'cancelBooking']);
+});
+Route::middleware(['auth:sanctum','role:doctor'])->prefix('BookingMnagement')->group(function () {
+    Route::patch('/markBookingAsServed{id}', [DoctorBookingMangement::class,'markBookingAsServed']);
 });
