@@ -34,34 +34,65 @@ class DoctorBookingMangement extends Controller
         return ApiResponse::sendResponse(200, 'Booking marked as served successfully', new BookingResource($booking));
     }
 
-
-    private function getBookingsByStatus($doctorId, $appointmentId, $status)
+    private function getBookingsByStatus($doctorId, $appointmentId, $status, $perPage = 10)
     {
-        return Booking::with(['user','appointment'])
+        return Booking::with(['user', 'appointment'])
             ->where('doctor_id', $doctorId)
             ->where('appointment_id', $appointmentId)
             ->where('status', $status)
-            ->get();
+            ->paginate($perPage);
     }
 
-    public function getConfirmedBookings($appointmentId)
+    public function getConfirmedBookings(Request $request, $appointmentId)
     {
         $doctorId = auth()->user()->doctor->id;
-        $bookings = $this->getBookingsByStatus($doctorId, $appointmentId, 'confirmed');
+        $perPage = $request->input('per_page', 10);
+
+        $bookings = $this->getBookingsByStatus($doctorId, $appointmentId, 'confirmed', $perPage);
+
         if ($bookings->isEmpty()) {
             return ApiResponse::sendResponse(404, 'No confirmed bookings found', []);
         }
         
-        return ApiResponse::sendResponse(200, 'Confirmed bookings retrieved successfully', BookingResource::collection($bookings));
+        return ApiResponse::sendResponse(200, 'Confirmed bookings retrieved successfully', [
+            'data' => BookingResource::collection($bookings),
+            'links' => [
+                'first' => $bookings->url(1),
+                'last' => $bookings->url($bookings->lastPage()),
+                'prev' => $bookings->previousPageUrl(),
+                'next' => $bookings->nextPageUrl()
+            ],
+            'meta' => [
+                'current_page' => $bookings->currentPage(),
+                'total_pages' => $bookings->lastPage(),
+                'total_items' => $bookings->total(),
+                'items_per_page' => $perPage,
+            ]
+        ]);
     }
 
-    public function getServedBookings($appointmentId)
+    public function getServedBookings(Request $request, $appointmentId)
     {
-        $doctorId = auth()->user()->id;
+        $doctorId = auth()->user()->doctor->id;
+        $perPage = $request->input('per_page', 1);
 
-        $bookings = $this->getBookingsByStatus($doctorId, $appointmentId, 'served');
+        $bookings = $this->getBookingsByStatus($doctorId, $appointmentId, 'served', $perPage);
 
-        return ApiResponse::sendResponse(200, 'Served bookings retrieved successfully', BookingResource::collection($bookings));
+        return ApiResponse::sendResponse(200, 'Served bookings retrieved successfully', [
+            'data' => BookingResource::collection($bookings),
+            'links' => [
+                'first' => $bookings->url(1),
+                'last' => $bookings->url($bookings->lastPage()),
+                'prev' => $bookings->previousPageUrl(),
+                'next' => $bookings->nextPageUrl()
+            ],
+            'meta' => [
+                'current_page' => $bookings->currentPage(),
+                'total_pages' => $bookings->lastPage(),
+                'total_items' => $bookings->total(),
+                'items_per_page' => $perPage,
+            ]
+        ]);
     }
 }
 
