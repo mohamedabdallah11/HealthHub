@@ -78,4 +78,31 @@ class BookingController extends Controller
         return ApiResponse::sendResponse(200, 'Booking confirmed successfully', new BookingResource($booking));
     }
 
+    public function cancelBooking($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $booking = Booking::find($id);
+
+            if (!$booking) {
+                return ApiResponse::sendResponse(404, 'Booking not found', []);
+            }
+
+            if ($booking->user_id !== auth()->id()) {
+                return ApiResponse::sendResponse(403, 'Unauthorized to cancel this booking', []);
+            }
+            if ($booking->status !== 'pending') {
+                return ApiResponse::sendResponse(400, 'you are not allowed ', []);
+            }
+            $booking->delete();
+
+            DB::commit();
+
+            return ApiResponse::sendResponse(200, 'Booking canceled successfully', []);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return ApiResponse::sendResponse(500, 'Failed to cancel booking', $e->getMessage());
+        }
+    }
 }
