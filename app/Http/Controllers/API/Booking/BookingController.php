@@ -24,7 +24,9 @@ class BookingController extends Controller
         if (!$appointment) {
             return ApiResponse::sendResponse(404, 'Appointment not found', []);
         }
-
+        if (!$appointment->is_available) {
+            return ApiResponse::sendResponse(400, 'This appointment is not available', []);
+        }
         $currentCapacity = $appointment->bookings()
             ->where('doctor_id', $doctorId)
             ->count();
