@@ -28,7 +28,7 @@ class BookingController extends Controller
             return ApiResponse::sendResponse(400, 'This appointment is not available', []);
         }
         $currentCapacity = $appointment->bookings()
-            ->where('doctor_id', $doctorId)
+            ->where('doctor_id', $doctorId )
             ->count();
 
         if ($currentCapacity >= $appointment->max_patients) {

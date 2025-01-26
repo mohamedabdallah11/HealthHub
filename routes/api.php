@@ -55,4 +55,6 @@ Route::middleware(['auth:sanctum','role:client'])->prefix('Booking')->group(func
 });
 Route::middleware(['auth:sanctum','role:doctor'])->prefix('BookingMnagement')->group(function () {
     Route::patch('/markBookingAsServed{id}', [DoctorBookingMangement::class,'markBookingAsServed']);
+    Route::get('/getConfirmedBookings/{appointmentId}', [DoctorBookingMangement::class,'getConfirmedBookings']);
+    Route::get('/getServedBookings/{appointmentId}', [DoctorBookingMangement::class,'getServedBookings']);
 });

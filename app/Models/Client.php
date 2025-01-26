@@ -24,4 +24,5 @@ public function user (){
 public function doctors(){
     return $this->belongsToMany(Doctor::class,'client_doctor');
 }
+
 }
