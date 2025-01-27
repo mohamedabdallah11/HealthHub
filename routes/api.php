@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\Authentication\socialiteAuthenticationController;
 use App\Http\Controllers\Api\Doctor\AppointmentController;
 use App\Http\Controllers\Api\Doctor\DoctorController;
 use App\Http\Controllers\Api\Doctor\DoctorBookingMangement;
+use App\Http\Controllers\Api\Doctor\SpecialtyController;
 
 use App\Http\Controllers\Api\Booking\BookingController;
 
@@ -58,3 +59,7 @@ Route::middleware(['auth:sanctum','role:doctor'])->prefix('BookingMnagement')->g
     Route::get('/getConfirmedBookings/{appointmentId}', [DoctorBookingMangement::class,'getConfirmedBookings']);
     Route::get('/getServedBookings/{appointmentId}', [DoctorBookingMangement::class,'getServedBookings']);
 });
+Route::middleware(['auth:sanctum'])->prefix('specialties')->group(function () {
+    Route::get('/show', [SpecialtyController::class, 'show']);
+});
+Route::get('/Specialties/show', [SpecialtyController::class, 'show'])->middleware(['auth:sanctum']);
