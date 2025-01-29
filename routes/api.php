@@ -11,7 +11,9 @@ use App\Http\Controllers\Api\Doctor\AppointmentController;
 use App\Http\Controllers\Api\Doctor\DoctorController;
 use App\Http\Controllers\Api\Doctor\DoctorBookingMangement;
 use App\Http\Controllers\Api\Doctor\SpecialtyController;
+use App\Http\Controllers\Api\Client\ClientController;
 use App\Http\Controllers\API\AdminDashboard\AdminSpecialtyController;
+
 
 use App\Http\Controllers\Api\Booking\BookingController;
 
@@ -50,6 +52,7 @@ Route::middleware(['auth:sanctum','role:client,doctor'])->prefix('Doctor/')->gro
     Route::get('/filterBySpecialty', [DoctorController::class, 'filterBySpecialty']);
 
 });
+
 Route::middleware(['auth:sanctum','role:client'])->prefix('Booking')->group(function () {
     Route::post('/bookAppointment', [BookingController::class,'bookAppointment']);
     Route::patch('/bookAppointment/confirm/{id}', [BookingController::class, 'confirmBooking']);
@@ -60,6 +63,17 @@ Route::middleware(['auth:sanctum','role:doctor'])->prefix('BookingMnagement')->g
     Route::get('/getConfirmedBookings/{appointmentId}', [DoctorBookingMangement::class,'getConfirmedBookings']);
     Route::get('/getServedBookings/{appointmentId}', [DoctorBookingMangement::class,'getServedBookings']);
 });
+
+Route::middleware('auth:sanctum')->prefix('Client')->group(function () {
+    Route::get('/bookings/confirmed', [ClientController::class, 'getConfirmedBookings']);
+    Route::get('/bookings/served', [ClientController::class, 'getServedBookings']);
+    Route::get('/bookings/pending', [ClientController::class, 'getPendingBookings']);
+});
+
+
+
+
+
 Route::middleware(['auth:sanctum'])->prefix('Specialties')->group(function () {
         Route::get('/show', [SpecialtyController::class, 'show']);
 
