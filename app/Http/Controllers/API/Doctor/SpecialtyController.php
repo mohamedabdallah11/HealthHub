@@ -13,8 +13,7 @@ class SpecialtyController extends Controller
      * Handle the incoming request.
      */
     public function show()
-    {
-        
+    {      
         $specialties = Specialty::all('name');
         return ApiResponse::sendResponse(200, 'Specialties retrieved successfully', $specialties);
     }
