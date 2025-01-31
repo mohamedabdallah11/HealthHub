@@ -95,8 +95,8 @@ class BookingController extends Controller
                 return ApiResponse::sendResponse(403, 'Unauthorized to cancel this booking', []);
             }
     
-            if ($booking->status !== 'pending') {
-                return ApiResponse::sendResponse(400, 'You are not allowed to cancel this booking', []);
+            if (!in_array($booking->status, ['pending', 'confirmed'])) {
+                return ApiResponse::sendResponse(400, 'Only pending or confirmed bookings can be canceled', []);
             }
             
             $appointmentDate = Carbon::parse($booking->appointment->date)->setTimezone('UTC');

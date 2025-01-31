@@ -36,7 +36,6 @@ Route::controller(socialiteAuthenticationController::class)->prefix('auth')->gro
     Route::get('/google/callback','handleGoogleCallback');
     Route::post('/google/CompleteRegister',GoogleRoleController::class)->middleware(['auth:sanctum','role:deactivated']);
 
-    
 });
 Route::middleware(['role:doctor','auth:sanctum'])->prefix('doctor/appointments')->group(function () {
     Route::post('/store', action: [AppointmentController::class, 'store']);
