@@ -10,7 +10,7 @@ use App\Helpers\ApiResponse;
 use App\Models\Booking;
 use App\Http\Resources\BookingResource;
 use App\Models\Doctor;
-
+use Carbon\Carbon;
 class BookingController extends Controller
 {
     public function bookAppointment(Request $request)
@@ -83,24 +83,42 @@ class BookingController extends Controller
     public function cancelBooking($id)
     {
         DB::beginTransaction();
-
+        
         try {
             $booking = Booking::find($id);
-
+    
             if (!$booking) {
                 return ApiResponse::sendResponse(404, 'Booking not found', []);
             }
-
+    
             if ($booking->user_id !== auth()->id()) {
                 return ApiResponse::sendResponse(403, 'Unauthorized to cancel this booking', []);
             }
+    
             if ($booking->status !== 'pending') {
-                return ApiResponse::sendResponse(400, 'you are not allowed ', []);
+                return ApiResponse::sendResponse(400, 'You are not allowed to cancel this booking', []);
             }
+            
+            $appointmentDate = Carbon::parse($booking->appointment->date)->setTimezone('UTC');
+            $startTime = Carbon::parse($booking->appointment->start_time)->setTimezone('UTC');
+            
+            $now = Carbon::now('UTC');
+    
+            if ($now->toDateString() === $appointmentDate->toDateString()) {
+                $cancellationDeadline = $startTime->subHours(2);
+                if ($now->lessThan($cancellationDeadline)) {
+                    return ApiResponse::sendResponse(400, 'Cancellation is not allowed within 2 hours of the appointment', $now);
+                }
+            }
+    
+            if ($now->greaterThan($appointmentDate)) {
+                return ApiResponse::sendResponse(400, 'Cancellation is not allowed after the appointment date', []);
+            }
+    
             $booking->delete();
-
+    
             DB::commit();
-
+    
             return ApiResponse::sendResponse(200, 'Booking canceled successfully', []);
         } catch (\Exception $e) {
             DB::rollBack();

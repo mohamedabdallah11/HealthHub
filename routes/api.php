@@ -58,8 +58,12 @@ Route::middleware(['auth:sanctum','role:client'])->prefix('Booking')->group(func
     Route::patch('/bookAppointment/confirm/{id}', [BookingController::class, 'confirmBooking']);
     Route::delete('/bookAppointment/cancel/{id}', [BookingController::class, 'cancelBooking']);
 });
-Route::middleware(['auth:sanctum','role:doctor'])->prefix('BookingMnagement')->group(function () {
-    Route::patch('/markBookingAsServed{id}', [DoctorBookingMangement::class,'markBookingAsServed']);
+
+
+
+
+Route::middleware(['auth:sanctum','role:doctor'])->prefix('BookingMangement')->group(function () {
+    Route::patch('/markBookingAsServed/{id}', [DoctorBookingMangement::class,'markBookingAsServed']);
     Route::get('/getConfirmedBookings/{appointmentId}', [DoctorBookingMangement::class,'getConfirmedBookings']);
     Route::get('/getServedBookings/{appointmentId}', [DoctorBookingMangement::class,'getServedBookings']);
 });
@@ -69,9 +73,6 @@ Route::middleware('auth:sanctum')->prefix('Client')->group(function () {
     Route::get('/bookings/served', [ClientController::class, 'getServedBookings']);
     Route::get('/bookings/pending', [ClientController::class, 'getPendingBookings']);
 });
-
-
-
 
 
 Route::middleware(['auth:sanctum'])->prefix('Specialties')->group(function () {
