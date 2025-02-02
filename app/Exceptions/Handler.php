@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Http\JsonResponse;
 
 class Handler extends ExceptionHandler
 {
@@ -27,4 +28,15 @@ class Handler extends ExceptionHandler
             //
         });
     }
+    public function render($request, Throwable $exception)
+{       
+    if ($exception instanceof ThrottleRequestsException) {
+        return new JsonResponse([
+            'message' => 'Too many requests, please slow down!',
+            'retry_after' => $exception->getHeaders()['Retry-After'] ?? 60, 
+        ], 429);
+    }
+
+    return parent::render($request, $exception);
+}
 }

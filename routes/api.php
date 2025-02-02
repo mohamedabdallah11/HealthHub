@@ -18,7 +18,7 @@ use App\Http\Controllers\API\AdminDashboard\AdminSpecialtyController;
 use App\Http\Controllers\Api\Booking\BookingController;
 
 
-
+Route::middleware(['throttle:apiRateLimit'])->group(function () {
 
 
 Route::controller(AuthController::class)->prefix('auth')->group(function () {
@@ -82,4 +82,6 @@ Route::middleware(['auth:sanctum'])->prefix('Specialties')->group(function () {
         Route::put('/updateSpecialty/{id}', [AdminSpecialtyController::class, 'update']);
         Route::delete('/deleteSpecialty/{id}', [AdminSpecialtyController::class, 'destroy']);
         });
+});
+
 });

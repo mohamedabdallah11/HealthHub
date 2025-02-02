@@ -5,6 +5,11 @@ namespace App\Providers;
 use App\Services\Abstract\ProfileServiceInterface;
 use App\Services\Implementation\ProfileService;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Http\Request;
+use Illuminate\Cache\RateLimiting\Limit;
+
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        RateLimiter::for('apiRateLimit', function (Request $request) {
+            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+        });
     }
 }
