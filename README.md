@@ -21,7 +21,9 @@ Postman (for API testing)
 
 Detailed API documentation, including request/response examples and authentication methods, is available in the Postman Collection.
 URL:https://documenter.getpostman.com/view/37675046/2sAYQiCoNF
+
 📥 Installation
+
 Clone the project:
 git clone https://github.com/mohamedabdallah11/HealthHub.git cd HealthHub 
 Install dependencies:
@@ -33,7 +35,7 @@ Open .env and configure the database:
 DB_CONNECTION=mysql DB_HOST=127.0.0.1 DB_PORT=3306 DB_DATABASE=healthhub DB_USERNAME=root DB_PASSWORD= 
 Create the database:
 CREATE DATABASE healthhub; 
-Run migrations and seeders:
+Run migrations:
 php artisan migrate  
 Generate the application key and start the server:
 php artisan key:generate php artisan serve 
