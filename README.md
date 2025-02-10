@@ -106,7 +106,7 @@ Enhanced scheduling features
 🖊️ Author
 
 Mohamed abdallah hafez - Backend Developer
-📧 Email: mohamedabdallahh26@example.com
+📧 Email: mohamedabdallahh26@gmail.com
 🔗 LinkedIn (https://www.linkedin.com/in/mohamed-abdallah26/)
 
 🚀 Thank you for using HealthHub!
