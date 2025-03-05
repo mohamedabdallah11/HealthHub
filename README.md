@@ -136,12 +136,13 @@ This module extends HealthHub by adding e-commerce capabilities, allowing users 
 - Reports and analytics for admin users
 - Enhanced scheduling features
 
-## 🖊️ **Author**
+## 🖊️ **Authors**
 
 👨‍💻 Mohamed Abdallah Hafez
 - Role: `Backend Developer`
 - 📧 [Email](mohamedabdallahh26@gmail.com)
 - 🔗 [LinkedIn](https://www.linkedin.com/in/mohamed-abdallah26/)
+
 👨‍💻 Taha Shosha 
 - Role: `Laravel Developer and Web Pen Tester`
 - 🔗 [LinkedIn](https://www.linkedin.com/in/taha-shosha-1ba45b233)
