@@ -8,6 +8,10 @@ use App\Models\User;
 use App\Helpers\ApiResponse;
 use App\Http\Resources\ProfileResource;
 
+use App\Models\Specialty;
+
+use App\Models\Doctor_Specialty;
+
 class ProfileService implements ProfileServiceInterface
 {
     public function showProfile(User $user)
@@ -28,6 +32,10 @@ class ProfileService implements ProfileServiceInterface
 
         if ($user->role == 'doctor') {
             $user->doctor->update($request->only(['bio', 'experience_year', 'fees']));
+            $specialty = Specialty::where('name', $request->specialty)->first();
+            if($specialty){
+                Doctor_Specialty::updateOrCreate(['doctor_id' => $user->doctor->id,'specialty_id' => $specialty->id]);
+            }
         } elseif ($user->role == 'client') {
             $user->client->update($request->only(['notes', 'medical_history','blood_type','weight','height']));
         }

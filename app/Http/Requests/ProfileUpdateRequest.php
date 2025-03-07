@@ -30,6 +30,7 @@ class ProfileUpdateRequest extends FormRequest
             'age' => ['nullable', 'integer','min:0'],
             //for doctors
             'experience_year' => ['nullable', 'integer','min:0'],
+            'specialty' => ['nullable', 'string'],
             'fees' => ['nullable', 'numeric','min:0'],
             'bio' => ['nullable', 'string'],
             //for clients

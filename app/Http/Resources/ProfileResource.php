@@ -27,6 +27,7 @@ class ProfileResource extends JsonResource
             $data['bio'] = $this->doctor->bio;
             $data['experience_year'] = $this->doctor->experience_year;
             $data['fees'] = $this->doctor->fees;
+            $data['specialties'] = $this->doctor->specialties->pluck('name');
         }
 
         if ($this->role == 'client') {
