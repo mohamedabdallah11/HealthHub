@@ -17,12 +17,15 @@ class DoctorInfoResource extends JsonResource
         return
          [    
         'id' => $this->id,
+        'fees' => $this->fees,
+        'bio' => $this->bio,
         'name' => $this->user->name, 
         'email' => $this->user->email,
         'phone' => $this->user->phone,
         'age' => $this->user->age,  
         'gender' => $this->user->gender,
         'specialization' => $this->specialties->pluck('name') ?? null, 
+        
         'governorate' => $this->user->governorate,
         'address' => $this->user->address,
         'appointments' => $this->appointments->map(function ($appointment) {
