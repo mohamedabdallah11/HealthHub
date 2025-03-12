@@ -6,11 +6,16 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
+use App\Models\User;
 use App\Mail\OtpMail;
 class OtpController extends Controller
 {
     public function sendOtp(Request $request)
-    {
+    {   
+        $user = User::where('email', $request->email)->first();
+        if ($user && $user->email_verified_at) {
+            return response()->json(['message' => 'Email already verified'], 422);
+        }
         $request->validate([
             'email' => 'required|email|exists:users,email', 
         ]);
@@ -39,11 +44,10 @@ class OtpController extends Controller
     
         Cache::forget('otp_' . $request->email);
     
-        $user = \App\Models\User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
         $user->email_verified_at = now();
         $user->save();
-        $data['verification']=$user->email_verified_at;
-        return response()->json(['message' => 'Email verified successfully'],200,$data);
+        return response()->json(['message' => 'Email verified successfully'],200);
     }
-
+    
     }
