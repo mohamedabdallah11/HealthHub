@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\Authentication\GoogleRoleController;
+use App\Http\Controllers\Api\Authentication\OtpController;
 use App\Http\Controllers\Api\Profile\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,10 @@ use App\Http\Controllers\Api\Booking\BookingController;
 
 Route::middleware(['throttle:apiRateLimit'])->group(function () {
 
+Route::controller(OtpController::class)->prefix('otp')->group(function () {
+    Route::post('/send','sendOtp');
+    Route::post('/verify', 'verifyOtp');
+}); 
 
 Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('/register', 'register');
@@ -83,5 +88,4 @@ Route::middleware(['auth:sanctum'])->prefix('Specialties')->group(function () {
         Route::delete('/deleteSpecialty/{id}', [AdminSpecialtyController::class, 'destroy']);
         });
 });
-
 });
