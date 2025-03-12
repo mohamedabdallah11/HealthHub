@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -32,6 +33,8 @@ class DoctorInfoResource extends JsonResource
             return [
                 'id' => $appointment->id,
                 'date' => $appointment->date,
+                'day' => Carbon::parse($appointment->date)->format('l'), 
+
                 'start_time' => $appointment->start_time,
                 'end_time' => $appointment->end_time,
                 'is_available' => $appointment->is_available,
