@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Validator; 
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cache;
+use App\Mail\OtpMail;
 
 class AuthController extends Controller
 {
@@ -84,5 +87,39 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
         return ApiResponse::sendResponse(200, 'User Logged out Successfully', []);
     }
- 
+    public function sendResetOtp(Request $request)
+    {
+        $request->validate(['email' => 'required|email|exists:users,email']);
+    
+        $otp = rand(100000, 999999); 
+        Cache::put('otp_' . $request->email, $otp, now()->addMinutes(5)); 
+        
+        Mail::to($request->email)->send(new OtpMail($otp));
+    
+        return ApiResponse::sendResponse(200, 'OTP sent successfully', []);
+    }
+
+    public function verifyOtpAndResetPassword(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email|exists:users,email',
+        'otp' => 'required|digits:6',
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    ]);
+
+    $cachedOtp = Cache::get('otp_' . $request->email);
+
+    if (!$cachedOtp || $cachedOtp != $request->otp) {
+        return ApiResponse::sendResponse(400, 'Invalid or expired OTP', []);
+    }
+
+    $user = User::where('email', $request->email)->first();
+    $user->password = Hash::make($request->password);
+    $user->save();
+
+    Cache::forget('otp_' . $request->email);
+
+    return ApiResponse::sendResponse(200, 'Password reset successfully', []);
+}
+
 }

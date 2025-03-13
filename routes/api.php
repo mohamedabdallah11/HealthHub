@@ -21,9 +21,14 @@ use App\Http\Controllers\Api\Booking\BookingController;
 
 Route::middleware(['throttle:apiRateLimit'])->group(function () {
 
-Route::controller(OtpController::class)->prefix('otp')->group(function () {
+Route::controller(OtpController::class)->prefix('otp/email/verification')->group(function () {
     Route::post('/send','sendOtp');
     Route::post('/verify', 'verifyOtp');
+}); 
+Route::controller(AuthController::class)->middleware(['verified'])->prefix('otp/password/reset')->group(function () {
+    Route::post('/send-otp',  'sendResetOtp');
+    Route::post('/verify', 'verifyOtpAndResetPassword');
+    
 }); 
 
 Route::controller(AuthController::class)->prefix('auth')->group(function () {
@@ -31,6 +36,7 @@ Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('/login', 'login');
     Route::post('/logout', 'logout')->middleware(['auth:sanctum','role:client,admin,doctor']);
 });
+
 Route::middleware(['auth:sanctum','role:client,doctor,admin'])->prefix('profile')->group(function () {
     Route::get('/show', [ProfileController::class, 'show']);
     Route::put('/update', [ProfileController::class, 'update']);
