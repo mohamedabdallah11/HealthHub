@@ -44,12 +44,11 @@ class DoctorController extends Controller
         $doctor = Doctor::with(['user', 
         'appointments' => function ($query) {
             $currentDate = now()->toDateString();
-            $currentTime = now()->addHours(2)->format('H:i:s'); // (UTC+2) for Egypt
-            $thresholdTime = now()->addHours(2)->addMinutes(30)->format('H:i:s'); // Add 30 minutes to give an enough time to get served if the client booked 30 minute before end_time of appointment 
+            $thresholdTime = now()->addHours(2)->addMinutes(30)->format('H:i:s'); // Add 30 minutes to give an enough time to get served if the client booked 30 minute before end_time of appointment  then +2 for egypt as it (UTC+2)
     
-            $query->where(function ($q) use ($currentDate, $currentTime, $thresholdTime) {
+            $query->where(function ($q) use ($currentDate, $thresholdTime) {
                 $q->whereDate('date', '>', $currentDate) // Future appointments
-                  ->orWhere(function ($subQuery) use ($currentDate, $currentTime, $thresholdTime) {
+                  ->orWhere(function ($subQuery) use ($currentDate, $thresholdTime) {
                       $subQuery->whereDate('date', $currentDate) // Today's appointments
                                ->whereRaw("TIME(end_time) > ?", [$thresholdTime]); // Ensure 30 min buffer
                   });
