@@ -41,7 +41,9 @@ class DoctorController extends Controller
             return ApiResponse::sendResponse(404, 'Doctor not found', []);
         }
     
-        $doctor = Doctor::with(['user', 'appointments', 'specialties'])
+        $doctor = Doctor::with(['user', 'appointments'=> function ($query) {
+            $query->whereDate('date', '>=', now()->toDateString()); 
+          }  , 'specialties'])
             ->where('id', $id)->first();
         $data = new DoctorInfoResource($doctor);
     
