@@ -17,6 +17,7 @@ class Appointment extends Model
         'is_available',
         'max_patients'
     ];
+    
     public function doctor(){
         return $this->belongsTo(Doctor::class);
     }

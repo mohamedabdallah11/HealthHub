@@ -13,10 +13,10 @@ class DoctorInfoResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    
     public function toArray(Request $request): array
     {
-        return
-         [    
+         return [    
         'id' => $this->id,
         'fees' => $this->fees,
         'bio' => $this->bio,
@@ -26,7 +26,6 @@ class DoctorInfoResource extends JsonResource
         'age' => $this->user->age,  
         'gender' => $this->user->gender,
         'specialization' => $this->specialties->pluck('name') ?? null, 
-        
         'governorate' => $this->user->governorate,
         'address' => $this->user->address,
         'appointments' => $this->appointments->map(function ($appointment) {
@@ -39,6 +38,6 @@ class DoctorInfoResource extends JsonResource
                 'is_available' => $appointment->is_available,
             ];
         }),
-        ];
+    ];
     }
 }
