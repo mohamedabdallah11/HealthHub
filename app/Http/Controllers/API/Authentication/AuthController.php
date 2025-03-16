@@ -61,8 +61,8 @@ class AuthController extends Controller
     public function login(LoginRequest $request)    
     {   
         $credentials = [
-            filter_var($request->email_or_phone, FILTER_VALIDATE_EMAIL) 
-            ? 'email' : 'phone' => $request->email_or_phone,
+            filter_var($request->email, FILTER_VALIDATE_EMAIL) 
+            ? 'email' : 'phone' => $request->email,
             'password' => $request->password,
         ];
 

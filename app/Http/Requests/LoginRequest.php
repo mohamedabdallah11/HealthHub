@@ -23,21 +23,21 @@ class LoginRequest extends FormRequest
     {
       
         return [
-            'email_or_phone' => ['required', 'string'],
+            'email' => ['required', 'string'],
             'password' => ['required'],
         ];
     }
     public function attributes()
     {
         return [
-            'email_or_phone' => 'Email or Phone',
+            'email' => 'Email ',
             'password' => 'Password',
         ];
     }
     public function messages()
 {
     return [
-        'email_or_phone.required' => 'The email or phone is required.',
+        'email.required' => 'The email is required.',
         'password.required' => 'The password is required.',
     ];
 }
