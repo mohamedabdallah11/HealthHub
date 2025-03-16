@@ -63,7 +63,8 @@ Route::middleware(['auth:sanctum','role:client,doctor'])->prefix('Doctor/')->gro
 
 });
 
-Route::middleware(['auth:sanctum','role:client'])->prefix('Booking')->group(function () {
+Route::middleware(['auth:sanctum','role:client,doctor'])->prefix('Booking')->group(function () {
+    Route::get('/availableSlots/{appointmentId}', [AppointmentController::class, 'getAvailableSlots']);
     Route::post('/bookAppointment', [BookingController::class,'bookAppointment']);
     Route::patch('/bookAppointment/confirm/{id}', [BookingController::class, 'confirmBooking']);
     Route::delete('/bookAppointment/cancel/{id}', [BookingController::class, 'cancelBooking']);
