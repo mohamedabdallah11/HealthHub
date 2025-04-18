@@ -72,7 +72,7 @@ class DoctorController extends Controller
         $specialtyId = $request->input('specialty_id');
         
         $doctors = Doctor::whereHas('specialties', function ($query) use ($specialtyId) {
-            $query->where('specialties.id', $specialtyId);
+            $query->where('specialties.id', $specialtyId);  
         })->paginate(10);
     
         return ApiResponse::sendResponse(200, 'Doctors filtered by specialty successfully', [

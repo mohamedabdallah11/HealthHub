@@ -26,8 +26,6 @@ class DoctorInfoResource extends JsonResource
         'age' => $this->user->age,  
         'gender' => $this->user->gender,
         'specialization' => $this->specialties->pluck('name') ?? null, 
-        'governorate' => $this->user->governorate,
-        'address' => $this->user->address,
         'appointments' => $this->appointments->map(function ($appointment) {
             return [
                 'id' => $appointment->id,

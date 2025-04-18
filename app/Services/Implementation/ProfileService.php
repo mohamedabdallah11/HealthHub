@@ -31,7 +31,9 @@ class ProfileService implements ProfileServiceInterface
         $user->update($request->validated());
 
         if ($user->role == 'doctor') {
-            $user->doctor->update($request->only(['bio', 'experience_year', 'fees']));
+            $user->doctor->update($request->only(
+                ['bio', 'experience_year', 'fees', 'clinicaddress', 'clinicgovernate',
+                        'clinicname']));
             $specialty = Specialty::where('name', $request->specialty)->first();
             if($specialty){
                 Doctor_Specialty::updateOrCreate(['doctor_id' => $user->doctor->id,'specialty_id' => $specialty->id]);

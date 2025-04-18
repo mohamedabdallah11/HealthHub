@@ -42,7 +42,6 @@ class ClientBookingInfoResource extends JsonResource
                 'phone' => $this->user->phone,
                 'age' => $this->user->age,
                 'gender' => $this->user->gender,
-                'address' => $this->user->address,
             ],
         ];  
             }
