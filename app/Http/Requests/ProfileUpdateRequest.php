@@ -25,13 +25,16 @@ class ProfileUpdateRequest extends FormRequest
             'name' => [ 'required','string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $this->user()->id],
             'phone' => ['nullable', 'string', 'unique:users,phone,'. $this->user()->id],
-            'governorate' => ['nullable', 'string'],
             'gender' => ['nullable', 'string','in:male,female'],
             'age' => ['nullable', 'integer','min:0'],
             //for doctors
             'experience_year' => ['nullable', 'integer','min:0'],
+            'specialty' => ['nullable', 'string'],
             'fees' => ['nullable', 'numeric','min:0'],
             'bio' => ['nullable', 'string'],
+            'clinicaddress' => ['nullable', 'string'],
+            'clinicgovernate' => ['nullable', 'string'],
+            'clinicname' => ['nullable', 'string'],
             //for clients
             'notes' => ['nullable', 'string'],
             'medical_history' => ['nullable', 'string'],

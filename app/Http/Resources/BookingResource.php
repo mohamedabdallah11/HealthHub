@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +21,8 @@ class BookingResource extends JsonResource
             'doctor_id' => $this->doctor_id,
             'client_id' => $this->user_id,
             'status' => $this->status,
-            'booking_time' => $this->created_at,
+            'slot_start_time' =>Carbon::parse($this->slot_start_time)->format('H:i'),
+            'slot_end_time' =>Carbon::parse($this->slot_end_time)->format('H:i'),
             'appointment' => [
                 'start_time' => $this->appointment->start_time,
                 'end_time' => $this->appointment->end_time,
@@ -32,14 +34,6 @@ class BookingResource extends JsonResource
                 'name' => $this->doctor->user->name,
                 'specialties' => $this->doctor->specialties->pluck('name'),
             ],
-            'client' => [
-                'id' => $this->user->id,
-                'name' => $this->user->name,
-                'email' => $this->user->email,
-                'phone' => $this->user->phone,
-                'age' => $this->user->age,
-                'gender' => $this->user->gender,
-                'address' => $this->user->address,
-            ],
+   
         ];    }
 }

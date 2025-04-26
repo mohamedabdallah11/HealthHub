@@ -41,7 +41,19 @@ class DoctorController extends Controller
             return ApiResponse::sendResponse(404, 'Doctor not found', []);
         }
     
-        $doctor = Doctor::with(['user', 'appointments', 'specialties'])
+        $doctor = Doctor::with(['user', 
+        'appointments' => function ($query) {
+            $currentDate = now()->toDateString();
+            $thresholdTime = now()->addHours(2)->addMinutes(30)->format('H:i:s'); // Add 30 minutes to give an enough time to get served if the client booked 30 minute before end_time of appointment  then +2 for egypt as it (UTC+2)
+    
+            $query->where(function ($q) use ($currentDate, $thresholdTime) {
+                $q->whereDate('date', '>', $currentDate) // Future appointments
+                  ->orWhere(function ($subQuery) use ($currentDate, $thresholdTime) {
+                      $subQuery->whereDate('date', $currentDate) // Today's appointments
+                               ->whereRaw("TIME(end_time) > ?", [$thresholdTime]); // Ensure 30 min buffer
+                  });
+            });
+        },'specialties'])
             ->where('id', $id)->first();
         $data = new DoctorInfoResource($doctor);
     
@@ -60,7 +72,7 @@ class DoctorController extends Controller
         $specialtyId = $request->input('specialty_id');
         
         $doctors = Doctor::whereHas('specialties', function ($query) use ($specialtyId) {
-            $query->where('specialties.id', $specialtyId);
+            $query->where('specialties.id', $specialtyId);  
         })->paginate(10);
     
         return ApiResponse::sendResponse(200, 'Doctors filtered by specialty successfully', [

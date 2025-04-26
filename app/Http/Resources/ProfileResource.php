@@ -19,14 +19,18 @@ class ProfileResource extends JsonResource
             'email' => $this->email,
             'role' => $this->role,
             'phone' => $this->phone,
-            'governorate' => $this->governorate,
             'id' => $this->id
+            
         ];
 
         if ($this->role == 'doctor') {
             $data['bio'] = $this->doctor->bio;
             $data['experience_year'] = $this->doctor->experience_year;
             $data['fees'] = $this->doctor->fees;
+            $data['clinicgovernate'] = $this->doctor->clinicgovernate;
+            $data['clinicaddress'] = $this->doctor->clinicaddress;
+            $data['clinicname'] = $this->doctor->clinicname;
+            $data['specialties'] = $this->doctor->specialties->pluck('name');
         }
 
         if ($this->role == 'client') {

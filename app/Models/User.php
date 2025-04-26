@@ -30,7 +30,6 @@ class User extends Authenticatable
         'phone',
         'age',
         'gender',
-        'address',
         'provider_id',
         'provider_type',
 

@@ -9,7 +9,7 @@ use App\Models\Booking;
 class Doctor extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id','bio','experience_year','fees'];
+    protected $fillable = ['user_id','bio','experience_year','fees','clinicaddress','clinicgovernate','clinicname'];
 
   
     public function user(){
