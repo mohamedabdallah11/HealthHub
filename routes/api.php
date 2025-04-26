@@ -17,6 +17,7 @@ use App\Http\Controllers\API\AdminDashboard\AdminSpecialtyController;
 use App\Http\Controllers\E_commerce\ProductController;
 use App\Http\Controllers\E_commerce\CategoryController;
 use App\Http\Controllers\E_commerce\OrderController;
+use App\Http\Controllers\E_commerce\CartController;
 
 use App\Http\Controllers\Api\Booking\BookingController;
 
@@ -123,6 +124,19 @@ Route::middleware(['throttle:apiRateLimit'])->group(function () {
             Route::get('/all', [OrderController::class, 'index']);
             Route::put('/update-status/{order}', [OrderController::class, 'updateStatus']);
             Route::delete('/destroy/{order}', [OrderController::class, 'destroy']);
+        });
+
+        // Cart Routes (Client Only)
+        Route::middleware(['role:client,doctor'])->prefix('cart')->group(function () {
+            Route::get('/', [CartController::class, 'index']);
+            // Modify
+            Route::post('/add', [CartController::class, 'store']);
+            Route::put('/update/{cart}', [CartController::class, 'update']);
+            Route::delete('/destroy/{cart}', [CartController::class, 'destroy']);
+            Route::delete('/clear', [CartController::class, 'clear']);
+            //checkout
+            Route::post('/order-item/{cartItem}', [CartController::class, 'orderSingleItem']);
+            Route::post('/order-selected', [CartController::class, 'orderSelectedItems']);
         });
     });
 
