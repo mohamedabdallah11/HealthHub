@@ -41,6 +41,8 @@ Route::middleware(['auth:sanctum','role:client,doctor,admin'])->prefix('profile'
     Route::get('/show', [ProfileController::class, 'show']);
     Route::put('/update', [ProfileController::class, 'update']);
     Route::put('/changePassword', [ProfileController::class, 'changePassword']);
+    Route::get('users/slug/{slug}', [ProfileController::class, 'showBySlug']);
+
 });
 Route::controller(socialiteAuthenticationController::class)->prefix('auth')->group(function () {
     Route::get('/google',action: 'redirectToGoogle');

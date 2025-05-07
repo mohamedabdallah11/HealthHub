@@ -59,4 +59,16 @@ class ProfileController extends Controller
         return ApiResponse::sendResponse(200, 'Password updated successfully', []);
     }
 
+    public function showBySlug($slug)
+    { 
+        $user = User::where('slug', $slug)->with(['doctor', 'client'])->firstOrFail();
+        if($user ){
+return ApiResponse::sendResponse(200, 'User data', [
+            'user' => new ProfileResource($user)
+        ]);
+        }else{
+            return ApiResponse::sendResponse(404, 'User not found', []);
+        }
+    
+    }
 }
