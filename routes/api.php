@@ -138,7 +138,7 @@ Route::middleware(['throttle:apiRateLimit'])->group(function () {
         // Product Routes (Accessible to Admins Only)
         Route::middleware(['role:admin'])->prefix('products')->group(function () {
             Route::post('/store', [ProductController::class, 'store']);
-            Route::put('/update/{product}', [ProductController::class, 'update']);
+            Route::post('/{product}/update', [ProductController::class, 'update']);
             Route::delete('/destroy/{product}', [ProductController::class, 'destroy']);
         });
 

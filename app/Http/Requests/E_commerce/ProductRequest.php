@@ -11,15 +11,17 @@ class ProductRequest extends FormRequest
         return true;
     }
 
-    public function rules(): array
+    public function rules()
     {
-        return [
-            'name' => 'required|string|max:255|unique:products,name',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'category_id' => 'required|exists:categories,id',
-        ];
+        if ($this->isMethod('post')) {
+            return [
+                'name' => 'required|string|max:255|unique:products,name',
+                'price' => 'required|numeric|min:0',
+                'stock' => 'required|integer|min:0',
+                'category_id' => 'required|exists:categories,id',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+                'description' => 'nullable|string'
+            ];
+        }
     }
 }
