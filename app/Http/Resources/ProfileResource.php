@@ -17,9 +17,12 @@ class ProfileResource extends JsonResource
         $data = [
             'name' => $this->name,
             'email' => $this->email,
+            'age' => $this->age,
+            'gender' => $this->gender,
+            'slug' => $this->slug,
             'role' => $this->role,
             'phone' => $this->phone,
-            'id' => $this->id
+            'user_id' => $this->id
             
         ];
 
@@ -31,11 +34,17 @@ class ProfileResource extends JsonResource
             $data['clinicaddress'] = $this->doctor->clinicaddress;
             $data['clinicname'] = $this->doctor->clinicname;
             $data['specialties'] = $this->doctor->specialties->pluck('name');
+            $data['doctor_id'] = $this->doctor->id;
         }
 
         if ($this->role == 'client') {
+            $data['client_id'] = $this->client->id;
             $data['notes'] = $this->client->notes;
             $data['medical_history'] = $this->client->medical_history;
+            $data['blood_type'] = $this->client->blood_type;
+            $data['weight'] = $this->client->weight;
+            $data['height'] = $this->client->height;
+
         }
 
         return $data;

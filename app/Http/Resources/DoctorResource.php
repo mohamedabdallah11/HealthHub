@@ -16,6 +16,7 @@ class DoctorResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'slug' => $this->user->slug,
             'name' => $this->user->name, 
             'specialization' => $this->specialties->pluck('name') ?? null, 
             'experience_year'=>$this->experience_year

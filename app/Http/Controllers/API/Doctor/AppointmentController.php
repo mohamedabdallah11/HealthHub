@@ -61,7 +61,7 @@ class AppointmentController extends Controller
             'date' => $date,
             'start_time' => $start_time,
             'end_time' => $end_time,
-'session_duration' => Carbon::createFromTimestampUTC($session_duration * 60)->format('H:i'),
+            'session_duration' => Carbon::createFromTimestampUTC($session_duration * 60)->format('H:i'),
             'is_available' => $is_available,
             'max_patients' => $max_patients
         ]);

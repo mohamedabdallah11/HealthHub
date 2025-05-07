@@ -17,6 +17,7 @@ class CustomResource extends JsonResource
         return[
             'name'=>$this->name,
             'email'=>$this->email,
+            'slug'=>$this->slug,
             'role'=>$this->role,
         ];   
      }
