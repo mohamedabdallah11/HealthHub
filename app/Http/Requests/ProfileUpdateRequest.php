@@ -22,8 +22,8 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => [ 'required','string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $this->user()->id],
+            'name' => [ 'string', 'max:255'],
+            'email' => [ 'string', 'email', 'max:255', 'unique:users,email,' . $this->user()->id],
             'phone' => ['nullable', 'string', 'unique:users,phone,'. $this->user()->id],
             'gender' => ['nullable', 'string','in:male,female'],
             'age' => ['nullable', 'integer','min:0'],
@@ -35,6 +35,7 @@ class ProfileUpdateRequest extends FormRequest
             'clinicaddress' => ['nullable', 'string'],
             'clinicgovernate' => ['nullable', 'string'],
             'clinicname' => ['nullable', 'string'],
+            'speciality' => ['nullable', 'string'],
             //for clients
             'notes' => ['nullable', 'string'],
             'medical_history' => ['nullable', 'string'],
@@ -42,6 +43,7 @@ class ProfileUpdateRequest extends FormRequest
             'weight' => ['nullable', 'integer','min:0'],
             'height' => ['nullable', 'integer','min:0'],
 
+            
         ];
         }
         public function messages(): array
