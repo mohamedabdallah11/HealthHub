@@ -122,4 +122,17 @@ class AuthController extends Controller
     return ApiResponse::sendResponse(200, 'Password reset successfully', []);
 }
 
+public function deleteUser(Request $request)
+{
+        $user = $request->user(); 
+    if (!$user) {
+        return ApiResponse::sendResponse(401, 'Unauthorized', []);
+    }
+
+    $user->delete();
+
+    return ApiResponse::sendResponse(200, 'Your account has been deleted successfully.', []);
+
+}
+
 }
