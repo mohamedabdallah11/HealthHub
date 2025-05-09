@@ -23,6 +23,7 @@ class ClientBookingInfoResource extends JsonResource
             'appointment_id' => $this->appointment_id,
             'doctor_id' => $this->doctor_id,
             'client_id' => $this->user_id,
+            'google_meet_link' => $this->google_meet_link,
             'status' => $this->status,
             'booking_time' => Carbon::parse($this->created_at)->format('yy-M-d H:i:s'),
             'appointment' => [
