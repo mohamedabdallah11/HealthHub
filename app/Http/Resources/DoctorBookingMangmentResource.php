@@ -17,6 +17,7 @@ class DoctorBookingMangmentResource extends JsonResource
         return [
             'appointment_id' => $this->appointment_id,
             'status' => $this->status,
+            'google_meet_link' => $this->google_meet_link,
     
             'slots' => $this->appointment->bookings
                 ->where('status', 'confirmed')
