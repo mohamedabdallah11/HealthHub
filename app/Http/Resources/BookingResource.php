@@ -28,6 +28,7 @@ class BookingResource extends JsonResource
                 'end_time' => $this->appointment->end_time,
                 'capacity' => $this->appointment->max_patients,
                 'available_capacity' => $this->appointment->max_patients - $this->appointment->bookings->count(),
+                'meeting_link' => $this->google_meet_link,
             ],
             'doctor' => [
                 'id' => $this->doctor->id,
