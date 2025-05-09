@@ -21,6 +21,10 @@ class DoctorInfoResource extends JsonResource
         'slug' => $this->user->slug,
         'fees' => $this->fees,
         'bio' => $this->bio,
+        'image' => $this->image ? asset($this->image) : null,
+        'clinicaddress' => $this->clinicaddress,
+        'clinicgovernate' => $this->clinicgovernate,
+        'clinicname' => $this->clinicname,
         'name' => $this->user->name, 
         'email' => $this->user->email,
         'phone' => $this->user->phone,
@@ -39,4 +43,4 @@ class DoctorInfoResource extends JsonResource
         }),
     ];
     }
-}
+}  

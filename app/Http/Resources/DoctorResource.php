@@ -19,7 +19,14 @@ class DoctorResource extends JsonResource
             'slug' => $this->user->slug,
             'name' => $this->user->name, 
             'specialization' => $this->specialties->pluck('name') ?? null, 
-            'experience_year'=>$this->experience_year
+            'experience_year'=>$this->experience_year,
+            'image'=> $this->image ? asset($this->image) : null,
+            'bio' => $this->bio,
+            'clinicaddress' => $this->clinicaddress,
+            'clinicgovernate' => $this->clinicgovernate,
+            'clinicname' => $this->clinicname,
+            'fees' => $this->fees,
+
 
         ];   
      }
