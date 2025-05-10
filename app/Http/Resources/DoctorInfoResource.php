@@ -37,6 +37,8 @@ class DoctorInfoResource extends JsonResource
                 'date' => $appointment->date,
                 'day' => Carbon::parse($appointment->date)->format('l'), 
                 'start_time' => $appointment->start_time,
+                'session_duration' => $appointment->session_duration,
+                'max_patients' => $appointment->max_patients,
                 'end_time' => $appointment->end_time,
                 'is_available' => $appointment->is_available,
             ];
