@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Doctor;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\DoctorInfoResource;
 use App\Models\Doctor;
@@ -12,11 +13,12 @@ use App\Http\Resources\DoctorResource;
 
 
 class DoctorController extends Controller
-{public function allDoctors(Request $request)
+{
+    public function allDoctors(Request $request)
     {
         try {
             $doctors = Doctor::with(['user', 'specialties'])->paginate(10);
-    
+
             return ApiResponse::sendResponse(
                 200,
                 'Doctors list fetched successfully.',
@@ -34,47 +36,71 @@ class DoctorController extends Controller
             return ApiResponse::sendResponse(500, 'Failed to fetch dashboard data.', $e->getMessage());
         }
     }
-    
-    public function doctorInformation($id)
-    {
-        if (!$doctor = Doctor::find($id)) {
+
+public function doctorInformation($identifier)
+{
+    if (is_numeric($identifier)) {
+        $doctor = Doctor::with([
+            'user',
+            'appointments' => function ($query) {
+                $currentDate = now()->toDateString();
+                $thresholdTime = now()->addHours(2)->addMinutes(30)->format('H:i:s');
+                $query->where(function ($q) use ($currentDate, $thresholdTime) {
+                    $q->whereDate('date', '>', $currentDate)
+                      ->orWhere(function ($subQuery) use ($currentDate, $thresholdTime) {
+                          $subQuery->whereDate('date', $currentDate)
+                                   ->whereRaw("TIME(end_time) > ?", [$thresholdTime]);
+                      });
+                });
+            },
+            'specialties'
+        ])->find($identifier); 
+
+    } else {
+        $user = User::where('slug', $identifier)->first();
+        if (!$user || !$user->doctor) {
             return ApiResponse::sendResponse(404, 'Doctor not found', []);
         }
-    
-        $doctor = Doctor::with(['user', 
-        'appointments' => function ($query) {
-            $currentDate = now()->toDateString();
-            $thresholdTime = now()->addHours(2)->addMinutes(30)->format('H:i:s'); // Add 30 minutes to give an enough time to get served if the client booked 30 minute before end_time of appointment  then +2 for egypt as it (UTC+2)
-    
-            $query->where(function ($q) use ($currentDate, $thresholdTime) {
-                $q->whereDate('date', '>', $currentDate) // Future appointments
-                  ->orWhere(function ($subQuery) use ($currentDate, $thresholdTime) {
-                      $subQuery->whereDate('date', $currentDate) // Today's appointments
-                               ->whereRaw("TIME(end_time) > ?", [$thresholdTime]); // Ensure 30 min buffer
-                  });
-            });
-        },'specialties'])
-            ->where('id', $id)->first();
-        $data = new DoctorInfoResource($doctor);
-    
-        if ($doctor)
-            return ApiResponse::sendResponse(
-                200,
-                'Doctor fetched successfully.',
-                $data
-            );
-    
-        return ApiResponse::sendResponse(500, 'Failed to fetch doctor data.', []);
+
+        $doctor = Doctor::with([
+            'user',
+            'appointments' => function ($query) {
+                $currentDate = now()->toDateString();
+                $thresholdTime = now()->addHours(2)->addMinutes(30)->format('H:i:s');
+                $query->where(function ($q) use ($currentDate, $thresholdTime) {
+                    $q->whereDate('date', '>', $currentDate)
+                      ->orWhere(function ($subQuery) use ($currentDate, $thresholdTime) {
+                          $subQuery->whereDate('date', $currentDate)
+                                   ->whereRaw("TIME(end_time) > ?", [$thresholdTime]);
+                      });
+                });
+            },
+            'specialties'
+        ])->where('user_id', $user->id)->first(); 
     }
-    
+
+    if (!$doctor) {
+        return ApiResponse::sendResponse(404, 'Doctor not found', []);
+    }
+
+    $data = new DoctorInfoResource($doctor);
+
+    return ApiResponse::sendResponse(
+        200,
+        'Doctor fetched successfully.',
+        $data
+    );
+}
+
+   
     public function filterBySpecialty(Request $request)
     {
         $specialtyId = $request->input('specialty_id');
-        
+
         $doctors = Doctor::whereHas('specialties', function ($query) use ($specialtyId) {
-            $query->where('specialties.id', $specialtyId);  
+            $query->where('specialties.id', $specialtyId);
         })->paginate(10);
-    
+
         return ApiResponse::sendResponse(200, 'Doctors filtered by specialty successfully', [
             'data' => DoctorResource::collection($doctors),
             'pagination' => [
@@ -85,16 +111,16 @@ class DoctorController extends Controller
             ]
         ]);
     }
-    
+
     public function searchByName(Request $request)
     {
         if ($request->has('name') && !empty($request->name)) {
             $doctors = Doctor::whereHas('user', function ($query) use ($request) {
                 $query->where('name', 'LIKE', '%' . $request->name . '%');
             })
-            ->with('specialties', 'appointments')
-            ->paginate(10);
-    
+                ->with('specialties', 'appointments')
+                ->paginate(10);
+
             return ApiResponse::sendResponse(200, 'Doctors retrieved successfully', [
                 'data' => DoctorResource::collection($doctors),
                 'pagination' => [
@@ -105,7 +131,7 @@ class DoctorController extends Controller
                 ]
             ]);
         }
-    
+
         return ApiResponse::sendResponse(400, 'Name parameter is required', []);
     }
 }

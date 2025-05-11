@@ -11,7 +11,8 @@ use App\Models\Booking;
 use App\Http\Resources\BookingResource;
 use App\Models\Doctor;
 use Carbon\Carbon;
-
+use App\Mail\BookingConfirmed;
+use Illuminate\Support\Facades\Mail;
 class BookingController extends Controller
 {
     public function bookAppointment(Request $request)
@@ -130,11 +131,20 @@ class BookingController extends Controller
         if ($confirmedBookingsCount >= $appointment->max_patients) {
             return ApiResponse::sendResponse(400, 'Cannot confirm booking, maximum capacity reached', []);
         }
+        /* $googleMeetService = new GoogleMeetService();
+           $meetLink = $googleMeetService->createMeeting($booking);
+
+
+           Mail::to($booking->user->email)->send(new BookingConfirmed($booking, $meetLink));
+        */
+        Mail::to($booking->user->email)->send(new BookingConfirmed($booking));
+        $booking->google_meet_link = "https://meet.google.com/vor-dodq-sda";
 
         $booking->status = 'confirmed';
+
         $booking->save();
 
-        return ApiResponse::sendResponse(200, 'Booking confirmed successfully', new BookingResource($booking));
+        return ApiResponse::sendResponse(200, 'Booking confirmed and Email sent successfully', new BookingResource($booking));
     }
 
     public function cancelBooking($id)

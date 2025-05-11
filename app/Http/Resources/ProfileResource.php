@@ -35,6 +35,7 @@ class ProfileResource extends JsonResource
             $data['clinicname'] = $this->doctor->clinicname;
             $data['specialties'] = $this->doctor->specialties->pluck('name');
             $data['doctor_id'] = $this->doctor->id;
+            $data['image'] = $this->doctor->image ? asset($this->doctor->image) : null;
         }
 
         if ($this->role == 'client') {
