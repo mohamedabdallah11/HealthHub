@@ -17,15 +17,16 @@ class DoctorBookingMangmentResource extends JsonResource
         return [
             'appointment_id' => $this->appointment_id,
             'status' => $this->status,
-            'google_meet_link' => $this->google_meet_link,
     
             'slots' => $this->appointment->bookings
                 ->where('status', 'confirmed')
                 ->groupBy('slot_start_time')
                 ->map(function ($bookings, $slotTime) {
                     return [
+                        'booking_id'=> $bookings->first()->id,
                         'slot_start_time' => $slotTime,
                         'slot_end_time' => $bookings->first()->slot_end_time, 
+                        'google_meet_link' => $bookings->first()->google_meet_link,
                         'clients' => $bookings->map(function ($booking) {
                             return [
                                 'name' => $booking->user->name,
