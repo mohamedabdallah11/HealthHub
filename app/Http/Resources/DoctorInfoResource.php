@@ -26,6 +26,7 @@ class DoctorInfoResource extends JsonResource
         'clinicgovernate' => $this->clinicgovernate,
         'clinicname' => $this->clinicname,
         'name' => $this->user->name, 
+        'role' => $this->user->role,
         'email' => $this->user->email,
         'phone' => $this->user->phone,
         'age' => $this->user->age,  
