@@ -11,7 +11,15 @@ class DoctorBookingMangmentResource extends JsonResource
      * Transform the resource into an array.
      *
      * @return array<string, mixed>
+
      */
+     protected $status;
+
+    public function __construct($resource, $status = 'confirmed')
+    {
+        parent::__construct($resource);
+        $this->status = $status;
+    }
     public function toArray(Request $request): array
     {
         return [
@@ -19,7 +27,7 @@ class DoctorBookingMangmentResource extends JsonResource
             'status' => $this->status,
     
             'slots' => $this->appointment->bookings
-                ->where('status', 'confirmed')
+                ->where('status', $this->status)
                 ->groupBy('slot_start_time')
                 ->map(function ($bookings, $slotTime) {
                     return [
