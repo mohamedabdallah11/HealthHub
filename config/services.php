@@ -35,5 +35,11 @@ return [
     'client_secret' => env('GOOGLE_CLIENT_SECRET'),
     'redirect' => env('GOOGLE_REDIRECT_URI'),
 ],
+    'stripe' => [
+        'base_url' => env('STRIPE_BASE_URL', 'https://api.stripe.com'),
+        'secret_key' => env('STRIPE_SECRET_KEY'),
+    ],
+
+
 
 ];

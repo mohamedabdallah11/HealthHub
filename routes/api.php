@@ -17,9 +17,14 @@ use App\Http\Controllers\API\AdminDashboard\AdminSpecialtyController;
 
 
 use App\Http\Controllers\Api\Booking\BookingController;
-
+use App\Http\Controllers\Api\Payment\PaymentController;
 
 Route::middleware(['throttle:apiRateLimit'])->group(function () {
+
+Route::post('/payment/process', [PaymentController::class, 'paymentProcess']);
+Route::match(['GET','POST'],'/payment/callback', [PaymentController::class, 'callBack']);
+Route::get('/payment-success', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment-failed', [PaymentController::class, 'failed'])->name('payment.failed');
 
 Route::controller(OtpController::class)->prefix('otp/email/verification')->group(function () {
     Route::post('/send','sendOtp');
