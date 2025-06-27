@@ -24,7 +24,6 @@ class GoogleRoleController extends Controller
             [
                 'role' => $request->role,
                 'phone' => $request->phone,
-                'governorate' => $request->governorate,
                 'gender' => $request->gender,
                 'age' => $request->age
             ]

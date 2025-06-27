@@ -54,6 +54,7 @@ Route::middleware(['auth:sanctum','role:client,doctor,admin'])->prefix('profile'
 Route::controller(socialiteAuthenticationController::class)->prefix('auth')->group(function () {
     Route::get('/google',action: 'redirectToGoogle');
     Route::get('/google/callback','handleGoogleCallback');
+    Route::post('/google/token', 'handleGoogleAccessToken');
     Route::post('/google/CompleteRegister',GoogleRoleController::class)->middleware(['auth:sanctum','role:deactivated']);
 
 });
