@@ -21,18 +21,24 @@ use App\Http\Controllers\E_commerce\OrderController;
 use App\Http\Controllers\E_commerce\CartController;
 
 use App\Http\Controllers\Api\Booking\BookingController;
-
+use App\Http\Controllers\Api\Payment\PaymentController;
 
 Route::middleware(['throttle:apiRateLimit'])->group(function () {
 
-    Route::controller(OtpController::class)->prefix('otp/email/verification')->group(function () {
-        Route::post('/send', 'sendOtp');
-        Route::post('/verify', 'verifyOtp');
-    });
-    Route::controller(AuthController::class)->middleware(['verified'])->prefix('otp/password/reset')->group(function () {
-        Route::post('/send-otp',  'sendResetOtp');
-        Route::post('/verify', 'verifyOtpAndResetPassword');
-    });
+Route::post('/payment/process', [PaymentController::class, 'paymentProcess']);
+Route::match(['GET','POST'],'/payment/callback', [PaymentController::class, 'callBack']);
+Route::get('/payment-success', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment-failed', [PaymentController::class, 'failed'])->name('payment.failed');
+
+Route::controller(OtpController::class)->prefix('otp/email/verification')->group(function () {
+    Route::post('/send','sendOtp');
+    Route::post('/verify', 'verifyOtp');
+}); 
+Route::controller(AuthController::class)->middleware(['verified'])->prefix('otp/password/reset')->group(function () {
+    Route::post('/send-otp',  'sendResetOtp');
+    Route::post('/verify', 'verifyOtpAndResetPassword');
+    
+}); 
 
     Route::controller(AuthController::class)->prefix('auth')->group(function () {
         Route::post('/register', 'register');

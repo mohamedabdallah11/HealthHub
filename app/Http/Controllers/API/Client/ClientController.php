@@ -25,10 +25,10 @@ class ClientController extends Controller
         $perPage = $request->input('per_page', 10);
 
         $bookings = $this->getBookingsByStatus($userId, 'confirmed', $perPage);
-
+/* 
         if ($bookings->isEmpty()) {
             return ApiResponse::sendResponse(404, 'No confirmed bookings found', []);
-        }
+        } */
 
         return ApiResponse::sendResponse(200, 'Confirmed bookings retrieved successfully', [
             'data' => ClientBookingInfoResource::collection($bookings),

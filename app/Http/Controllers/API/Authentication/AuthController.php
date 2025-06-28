@@ -82,11 +82,16 @@ class AuthController extends Controller
 
     }
 
-    public function logout(Request $request)
-    {
-        $request->user()->currentAccessToken()->delete();
-        return ApiResponse::sendResponse(200, 'User Logged out Successfully', []);
+public function logout(Request $request)
+{
+    $token = $request->user()->currentAccessToken();
+
+    if ($token && $token instanceof \Laravel\Sanctum\PersonalAccessToken) {
+        $token->delete();
     }
+
+    return ApiResponse::sendResponse(200, 'User Logged out Successfully', []);
+}
     public function sendResetOtp(Request $request)
     {
         $request->validate(['email' => 'required|email|exists:users,email']);

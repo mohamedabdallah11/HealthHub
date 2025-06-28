@@ -14,7 +14,7 @@ class SpecialtyController extends Controller
      */
     public function show()
     {      
-        $specialties = Specialty::all('name');
+    $specialties = Specialty::select('id', 'name')->get();
         return ApiResponse::sendResponse(200, 'Specialties retrieved successfully', $specialties);
     }
 

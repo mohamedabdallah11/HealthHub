@@ -95,6 +95,12 @@ class BookingController extends Controller
     public function confirmBooking($id)
     {
         $booking = Booking::find($id);
+        if (!$booking) {
+            return ApiResponse::sendResponse(404, 'Booking not found', []);
+        }
+        if ($booking->user_id !== auth()->id()) {
+    return ApiResponse::sendResponse(403, 'You are not authorized to confirm this booking', []);
+}
 
         if (!$booking) {
             return ApiResponse::sendResponse(404, 'Booking not found', []);

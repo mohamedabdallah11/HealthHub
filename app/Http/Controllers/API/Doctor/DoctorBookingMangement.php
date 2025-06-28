@@ -64,7 +64,7 @@ public function getConfirmedBookings(Request $request, $appointmentId)
         ->where('status', 'confirmed')
         ->get()
         ->groupBy('appointment_id')
-        ->map(fn ($bookingGroup) => new DoctorBookingMangmentResource($bookingGroup->first()))
+        ->map(fn ($bookingGroup) => new DoctorBookingMangmentResource($bookingGroup->first(),'confirmed'))
         ->values(); 
 
     if ($bookings->isEmpty()) {
@@ -112,7 +112,7 @@ public function getServedBookings(Request $request, $appointmentId)
         ->where('status', 'served')
         ->get()
         ->groupBy('appointment_id')
-        ->map(fn ($bookingGroup) => new DoctorBookingMangmentResource($bookingGroup->first()))
+        ->map(fn ($bookingGroup) => new DoctorBookingMangmentResource($bookingGroup->first(),'served'))
         ->values(); 
 
     if ($bookings->isEmpty()) {

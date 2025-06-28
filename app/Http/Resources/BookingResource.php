@@ -21,20 +21,23 @@ class BookingResource extends JsonResource
             'doctor_id' => $this->doctor_id,
             'client_id' => $this->user_id,
             'status' => $this->status,
-            'slot_start_time' =>Carbon::parse($this->slot_start_time)->format('H:i'),
-            'slot_end_time' =>Carbon::parse($this->slot_end_time)->format('H:i'),
+            'slot_start_time' => Carbon::parse($this->slot_start_time)->format('H:i'),
+            'slot_end_time' => Carbon::parse($this->slot_end_time)->format('H:i'),
+
             'appointment' => [
                 'start_time' => $this->appointment->start_time,
                 'end_time' => $this->appointment->end_time,
                 'capacity' => $this->appointment->max_patients,
                 'available_capacity' => $this->appointment->max_patients - $this->appointment->bookings->count(),
                 'meeting_link' => $this->google_meet_link,
+
             ],
             'doctor' => [
                 'id' => $this->doctor->id,
                 'name' => $this->doctor->user->name,
                 'specialties' => $this->doctor->specialties->pluck('name'),
             ],
-   
-        ];    }
+
+        ];
+    }
 }
