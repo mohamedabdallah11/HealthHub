@@ -14,11 +14,46 @@ use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
+        $query = Product::query();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%$search%")
+                    ->orWhere('description', 'LIKE', "%$search%");
+            });
+        }
+
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->input('min_price'));
+        }
+
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->input('max_price'));
+        }
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->input('category_id'));
+        }
+
+        if ($request->filled('sort_by')) {
+            $sortField = $request->input('sort_by');
+            $sortDirection = $request->input('sort_dir', 'asc');
+
+            if (in_array($sortField, ['price', 'created_at']) && in_array($sortDirection, ['asc', 'desc'])) {
+                $query->orderBy($sortField, $sortDirection);
+            }
+        } else {
+            $query->latest();
+        }
+
+        $products = $query->paginate(10);
+
         return ProductResource::collection($products);
     }
+
 
     public function store(ProductRequest $request)
     {
