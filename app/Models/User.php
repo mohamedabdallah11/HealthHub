@@ -29,6 +29,7 @@ class User extends Authenticatable
         'gender',
         'provider_id',
         'provider_type',
+        'email_verified_at'
   
         
         
