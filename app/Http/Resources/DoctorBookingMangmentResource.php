@@ -37,9 +37,11 @@ class DoctorBookingMangmentResource extends JsonResource
                         'google_meet_link' => $bookings->first()->google_meet_link,
                         'clients' => $bookings->map(function ($booking) {
                             return [
+                                'slug' => $booking->user->slug,
                                 'name' => $booking->user->name,
                                 'email' => $booking->user->email,
                                 'phone' => $booking->user->phone,
+
                             ];
                         })->values(),
                     ];
