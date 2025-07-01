@@ -23,7 +23,7 @@ class ProfileResource extends JsonResource
             'role' => $this->role,
             'phone' => $this->phone,
             'user_id' => $this->id,
-            'email_verified_at' => $this->email_verified_at,
+            'email_verified_at'=>$this->email_verified_at ? $this->email_verified_at->format('Y-m-d H:i:s') : null,
             
         ];
 
