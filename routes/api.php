@@ -30,7 +30,7 @@ Route::controller(OtpController::class)->prefix('otp/email/verification')->group
     Route::post('/send','sendOtp');
     Route::post('/verify', 'verifyOtp');
 }); 
-Route::controller(AuthController::class)->middleware(['verified'])->prefix('otp/password/reset')->group(function () {
+Route::controller(AuthController::class)->prefix('otp/password/reset')->group(function () {
     Route::post('/send-otp',  'sendResetOtp');
     Route::post('/verify', 'verifyOtpAndResetPassword');
     
