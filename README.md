@@ -49,7 +49,11 @@ Detailed API documentation, including request/response examples and authenticati
 7. Generate the application key and start the server:
     + ```
       php artisan key:generate 
-      php artisan serve 
+      php artisan serve
+
+8. run the storage link for uploading images
+   + ```
+     php artisan storage:link
 
 ## 🛠️ **Project Features**
 
