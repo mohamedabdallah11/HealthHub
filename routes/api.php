@@ -46,7 +46,7 @@ Route::controller(AuthController::class)->prefix('auth')->group(function () {
 
 Route::middleware(['auth:sanctum','role:client,doctor,admin'])->prefix('profile')->group(function () {
     Route::get('/show', [ProfileController::class, 'show']);
-    Route::put('/update', [ProfileController::class, 'update']);
+    Route::post('/update', [ProfileController::class, 'update']);
     Route::put('/changePassword', [ProfileController::class, 'changePassword']);
     Route::get('users/slug/{slug}', [ProfileController::class, 'showBySlug']);
 

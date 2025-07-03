@@ -35,7 +35,7 @@ class ProfileUpdateRequest extends FormRequest
             'clinicaddress' => ['nullable', 'string'],
             'clinicgovernate' => ['nullable', 'string'],
             'clinicname' => ['nullable', 'string'],
-            'speciality' => ['nullable', 'string'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:10240'], 
             //for clients
             'notes' => ['nullable', 'string'],
             'medical_history' => ['nullable', 'string'],
@@ -61,7 +61,6 @@ class ProfileUpdateRequest extends FormRequest
                 'email' => 'email',
                 'bio' => 'bio',
                 'phone' => 'phone',
-                'governorate' => 'governorate',
                 'experience_year' => 'experience_year',
                 'fees' => 'fees',
                 'notes' => 'notes',
