@@ -13,51 +13,61 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 
 class socialiteAuthenticationController extends Controller
-{  public function redirectToGoogle()
+{
+    public function redirectToGoogle(Request $request)
     {
+        if ($request->has('base_url')) {
+            session(['oauth_base_url' => $request->base_url]);
+        }
+
         return Socialite::driver('google')->redirect();
     }
 
-    public function handleGoogleCallback()
+    public function handleGoogleCallback(Request $request)
     {
         try {
-            $httpClient = new Client([
-                'verify' => false,
-            ]);
+            $httpClient = new Client(['verify' => false]);
 
-            $user = Socialite::driver('google')
-                ->setHttpClient($httpClient)
-                ->stateless()
-                ->user();
+            /** @var \Laravel\Socialite\Two\GoogleProvider $provider */
+            $provider = Socialite::driver('google');
+            $provider->setHttpClient($httpClient);
+            $user = $provider->stateless()->user();
 
             $findUser = User::where('provider_id', $user->id)->first();
 
             if ($findUser) {
-                $data = new UserResource($findUser);
-                $data['token'] = $findUser->createToken('authToken')->plainTextToken;
-                return ApiResponse::sendResponse(200, 'User Logged In successfully', $data);
+                $authUser = $findUser;
             } else {
-                $newUser = User::create([
+                $authUser = User::create([
                     'name' => $user->name,
                     'email' => $user->email,
                     'provider_id' => $user->id,
                     'provider_type' => 'google',
                     'password' => Hash::make('my-google'),
                     'role' => 'deactivated',
+                    'email_verified_at' => now(), 
                 ]);
-                $data = new UserResource($newUser);
-                $data['token'] = $newUser->createToken('authToken')->plainTextToken;
-                return ApiResponse::sendResponse(200, 'User Registered successfully', $data);
             }
+
+            $token = $authUser->createToken('authToken')->plainTextToken;
+
+            $baseUrl = session('oauth_base_url');
+
+            session()->forget('oauth_base_url');
+
+            $frontendUrl = rtrim($baseUrl, '/') . '/api/auth/google/callback';
+
+            return redirect()->to("{$frontendUrl}?token={$token}&slug={$authUser->slug}&role={$authUser->role}");
+
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
                 'message' => $e->getMessage(),
-                'trace' => $e->getTrace(),
             ], 500);
         }
     }
-       public function handleGoogleAccessToken(Request $request)
+
+    public function handleGoogleAccessToken(Request $request)
     {
         try {
             $request->validate([
@@ -104,5 +114,3 @@ class socialiteAuthenticationController extends Controller
         }
     }
 }
-
-
