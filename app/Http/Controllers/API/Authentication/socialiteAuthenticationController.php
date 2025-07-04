@@ -45,7 +45,7 @@ class socialiteAuthenticationController extends Controller
                     'provider_type' => 'google',
                     'password' => Hash::make('my-google'),
                     'role' => 'deactivated',
-                    'email_verified_at' => now(), 
+                    'email_verified_at' => now(),
                 ]);
             }
 
@@ -55,9 +55,9 @@ class socialiteAuthenticationController extends Controller
 
             session()->forget('oauth_base_url');
 
-            $frontendUrl = rtrim($baseUrl, '/') . '/api/auth/google/callback';
+            $frontendUrl = rtrim($baseUrl, '/') ;
 
-            return redirect()->to("{$frontendUrl}?token={$token}&slug={$authUser->slug}&role={$authUser->role}");
+            return redirect()->to("{$frontendUrl}?token={$token}&slug={$authUser->slug}&role={$authUser->role}&callback=true");
 
         } catch (\Exception $e) {
             return response()->json([
