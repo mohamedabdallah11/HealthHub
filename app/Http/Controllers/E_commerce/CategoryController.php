@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Resources\E_commerce\CategoryResource;
 use App\Http\Requests\E_commerce\CategoryRequest;
+use App\Http\Resources\E_commerce\ProductResource;
 use Illuminate\Http\Response;
 
 class CategoryController extends Controller
@@ -26,10 +27,11 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        $category->load('products'); // Eager load products
+        $category->load('products');
 
         return response()->json([
-            'category' => $category
+            'category' => new CategoryResource($category),
+            'products' => ProductResource::collection($category->products),
         ]);
     }
 
