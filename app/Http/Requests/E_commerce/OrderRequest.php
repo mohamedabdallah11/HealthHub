@@ -18,7 +18,7 @@ class OrderRequest extends FormRequest
             'products.*.id' => 'required|exists:products,id', // Validate product IDs
             'products.*.quantity' => 'required|integer|min:1',
             'address' => 'required|string|max:255',
+            'phone' => 'required|string|digits:11|regex:/^01[0-9]{9}$/'
         ];
     }
-
 }

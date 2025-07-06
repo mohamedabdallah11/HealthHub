@@ -14,6 +14,7 @@ class OrderResource extends JsonResource
             'total_price' => (float)$this->total_price,
             'status' => $this->status,
             'address' => $this->address,
+            'phone' => $this->phone,
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
             'products' => $this->items->map(function ($item) {
                 return [

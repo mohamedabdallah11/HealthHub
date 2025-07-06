@@ -54,6 +54,8 @@ class OrderController extends Controller
             'status' => 'pending',
             'total_price' => $total,
             'address' => $request->address,
+            'phone' => $request->phone,
+
         ]);
 
         // 4. Create order items (using server-side prices)
