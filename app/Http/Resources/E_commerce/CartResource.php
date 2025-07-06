@@ -13,7 +13,7 @@ class CartResource extends JsonResource
             'product_id' => $this->product_id,
             'product_name' => $this->product->name,
             'product_price' => (float)$this->product->price,
-            'product_image' => $this->product->image_url ?? null,
+            'product_image' => $this->product->image ? asset('storage/products/products/' . $this->product->image) : null,
             'quantity' => $this->quantity,
             'subtotal' => (float)($this->product->price * $this->quantity),
             'added_at' => $this->created_at?->format('Y-m-d H:i:s'),
