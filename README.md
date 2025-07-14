@@ -15,6 +15,11 @@ Before running the project, ensure you have the following installed:
 - Composer
 - MySQL 8
 - Postman (for API testing)
+- 
+## Integration 
+Note: u have to run the backend server first local..
+ --Live Demo: https://health-hub-chi.vercel.app/
+ --FrontEnd repo: https://github.com/Mahmoud-Fares/health-hub
 
 ## 📄 **API Documentation**
 
@@ -49,7 +54,11 @@ Detailed API documentation, including request/response examples and authenticati
 7. Generate the application key and start the server:
     + ```
       php artisan key:generate 
-      php artisan serve 
+      php artisan serve
+
+8. run the storage link for uploading images
+   + ```
+     php artisan storage:link
 
 ## 🛠️ **Project Features**
 

@@ -34,7 +34,7 @@ Route::controller(OtpController::class)->prefix('otp/email/verification')->group
     Route::post('/send','sendOtp');
     Route::post('/verify', 'verifyOtp');
 }); 
-Route::controller(AuthController::class)->middleware(['verified'])->prefix('otp/password/reset')->group(function () {
+Route::controller(AuthController::class)->prefix('otp/password/reset')->group(function () {
     Route::post('/send-otp',  'sendResetOtp');
     Route::post('/verify', 'verifyOtpAndResetPassword');
     
@@ -94,6 +94,22 @@ Route::controller(AuthController::class)->middleware(['verified'])->prefix('otp/
     });
 });
 Route::middleware(['role:doctor', 'auth:sanctum'])->prefix('doctor/appointments')->group(function () {
+
+Route::middleware(['auth:sanctum','role:client,doctor,admin'])->prefix('profile')->group(function () {
+    Route::get('/show', [ProfileController::class, 'show']);
+    Route::post('/update', [ProfileController::class, 'update']);
+    Route::put('/changePassword', [ProfileController::class, 'changePassword']);
+    Route::get('users/slug/{slug}', [ProfileController::class, 'showBySlug']);
+
+});
+Route::controller(socialiteAuthenticationController::class)->prefix('auth')->group(function () {
+    Route::get('/google',action: 'redirectToGoogle');
+    Route::get('/google/callback','handleGoogleCallback');
+    Route::post('/google/token', 'handleGoogleAccessToken');
+    Route::post('/google/CompleteRegister',GoogleRoleController::class)->middleware(['auth:sanctum','role:deactivated']);
+
+});
+Route::middleware(['role:doctor','auth:sanctum'])->prefix('doctor/appointments')->group(function () {
     Route::post('/store', action: [AppointmentController::class, 'store']);
     Route::get('/show', [AppointmentController::class, 'show']);
     Route::put('/update/{appointment}', [AppointmentController::class, 'update']);
@@ -112,6 +128,8 @@ Route::middleware(['auth:sanctum', 'role:client,doctor'])->prefix('Booking')->gr
     Route::post('/bookAppointment', [BookingController::class, 'bookAppointment']);
     Route::patch('/bookAppointment/confirm/{id}', [BookingController::class, 'confirmBooking']);
     Route::delete('/bookAppointment/cancel/{id}', [BookingController::class, 'cancelBooking']);
+    Route::get('/bookingFeesByBookingId/{id}', [BookingController::class, 'bookinkFeesByBookingId']);
+    Route::get('/bookingFeesByDoctorId/{id}', [BookingController::class, 'bookinkFeesByDoctor_id']);
 });
 
 

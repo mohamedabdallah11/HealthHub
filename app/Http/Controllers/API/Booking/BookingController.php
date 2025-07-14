@@ -13,8 +13,48 @@ use App\Models\Doctor;
 use Carbon\Carbon;
 use App\Mail\BookingConfirmed;
 use Illuminate\Support\Facades\Mail;
+
 class BookingController extends Controller
 {
+    public function bookinkFeesByBookingId($id)
+    {
+         $booking = Booking::find($id);
+
+        if (!$booking) {
+            return ApiResponse::sendResponse(404, 'Booking not found', []);
+        }
+
+        if (in_array($booking->status, ['confirmed', 'served'])) {
+            return ApiResponse::sendResponse(400, 'Booking is not pending', []);
+        }   
+
+        $fees = optional($booking->appointment->doctor)->fees;
+
+        if (!$fees) {
+            return ApiResponse::sendResponse(404, 'Fees not found for this appointment', []);
+        }
+
+        return ApiResponse::sendResponse(200, 'Booking fees retrieved successfully', ['fees' => $fees]);
+    
+    }
+    public function bookinkFeesByDoctor_id($id)
+    {
+        $Doctor = Doctor::find($id);
+
+        if (!$Doctor) {
+            return ApiResponse::sendResponse(404, 'doctor not found', []);
+        } 
+
+
+        $fees = $Doctor->fees;
+
+        if (!$fees) {
+            return ApiResponse::sendResponse(404, 'Fees not found for this Doctor', []);
+        }
+
+        return ApiResponse::sendResponse(200, 'Booking fees retrieved successfully', ['fees' => $fees]);
+    
+    }
     public function bookAppointment(Request $request)
     {
         $doctorId = $request->input('doctor_id');
@@ -99,8 +139,8 @@ class BookingController extends Controller
             return ApiResponse::sendResponse(404, 'Booking not found', []);
         }
         if ($booking->user_id !== auth()->id()) {
-    return ApiResponse::sendResponse(403, 'You are not authorized to confirm this booking', []);
-}
+            return ApiResponse::sendResponse(403, 'You are not authorized to confirm this booking', []);
+        }
 
         if (!$booking) {
             return ApiResponse::sendResponse(404, 'Booking not found', []);

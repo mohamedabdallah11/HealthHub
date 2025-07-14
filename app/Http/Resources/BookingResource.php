@@ -36,6 +36,7 @@ class BookingResource extends JsonResource
                 'id' => $this->doctor->id,
                 'name' => $this->doctor->user->name,
                 'specialties' => $this->doctor->specialties->pluck('name'),
+                'slug' => $this->doctor->user->slug,
             ],
 
         ];

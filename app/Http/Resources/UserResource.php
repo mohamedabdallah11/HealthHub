@@ -20,6 +20,7 @@ class UserResource extends JsonResource
             'email'=>$this->email,
             'role'=>$this->role,
             'slug'=>$this->slug,
+            'email_verified_at'=>$this->email_verified_at ? $this->email_verified_at->format('Y-m-d H:i:s') : null,
         ];
     }
 }
