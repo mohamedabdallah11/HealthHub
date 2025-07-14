@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -26,16 +27,15 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'governorate',
         'phone',
         'age',
         'gender',
         'provider_id',
         'provider_type',
         'email_verified_at'
-  
-        
-        
+
+
+
 
     ];
 
@@ -64,7 +64,8 @@ class User extends Authenticatable
             $user->slug = Str::slug($user->name) . '-' . uniqid();
         });
     }
-    public function doctor() {
+    public function doctor()
+    {
         return $this->hasOne(Doctor::class);
     }
     public function client()

@@ -29,18 +29,15 @@ class CartController extends Controller
 
     public function store(CartRequest $request)
     {
-        // Check if product already in cart
         $existingCartItem = Cart::where('user_id', auth()->id())
             ->where('product_id', $request->product_id)
             ->first();
 
         if ($existingCartItem) {
-            // Update quantity if already exists
             $existingCartItem->increment('quantity', $request->quantity);
             return new CartResource($existingCartItem->load('product'));
         }
 
-        // Create new cart item
         $cartItem = Cart::create([
             'user_id' => auth()->id(),
             'product_id' => $request->product_id,
@@ -50,24 +47,20 @@ class CartController extends Controller
         return new CartResource($cartItem->load('product'));
     }
 
-    // In CartController.php
 
     public function orderSingleItem(Cart $cartItem)
     {
-        // Validate ownership
         if ($cartItem->user_id !== auth()->id()) {
             abort(403, 'Unauthorized');
         }
 
-        // Create order
         $order = Order::create([
             'user_id' => auth()->id(),
             'status' => 'pending',
             'total_price' => $cartItem->product->price * $cartItem->quantity,
-            'address' => request('address'), // Get address from request
+            'address' => request('address'), 
         ]);
 
-        // Create order item
         OrderItem::create([
             'order_id' => $order->id,
             'product_id' => $cartItem->product_id,
@@ -75,7 +68,6 @@ class CartController extends Controller
             'price' => $cartItem->product->price
         ]);
 
-        // Remove from cart
         $cartItem->delete();
 
         return new OrderResource($order);
