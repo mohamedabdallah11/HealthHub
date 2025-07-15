@@ -31,6 +31,17 @@ public function pending()
 {
     $pendingDoctors = Doctor::where('role_activation', 'false')->get();
 
-  return ApiResponse::sendResponse(200, 'Pending doctors retrieved successfully', DoctorResource::collection($pendingDoctors));
+    $doctors = $pendingDoctors->map(function ($doctor) {
+        return [
+            'id' => $doctor->id,
+            'name' => $doctor->user->name,
+            'email' => $doctor->user->email,
+            'phone' => $doctor->user->phone,
+            'slug' => $doctor->user->slug,
+            'role_activation' => $doctor->role_activation,
+        ];
+    });
+
+    return ApiResponse::sendResponse(200, 'Pending doctors retrieved successfully', $doctors);
 }
 }
