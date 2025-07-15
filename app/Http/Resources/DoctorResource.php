@@ -26,6 +26,7 @@ class DoctorResource extends JsonResource
             'clinicgovernate' => $this->clinicgovernate,
             'clinicname' => $this->clinicname,
             'fees' => $this->fees,
+            'role_activation' => $this->role_activation,
 
 
         ];   
