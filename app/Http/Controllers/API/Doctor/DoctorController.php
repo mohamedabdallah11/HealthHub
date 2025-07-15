@@ -17,8 +17,9 @@ class DoctorController extends Controller
     public function allDoctors(Request $request)
     {
         try {
-            $doctors = Doctor::with(['user', 'specialties'])->paginate(10);
-
+            $doctors = Doctor::where('role_activation', true)
+                ->with(['user', 'specialties'])
+                ->paginate(10);
             return ApiResponse::sendResponse(
                 200,
                 'Doctors list fetched successfully.',
@@ -37,62 +38,61 @@ class DoctorController extends Controller
         }
     }
 
-public function doctorInformation($identifier)
-{
-    if (is_numeric($identifier)) {
-        $doctor = Doctor::with([
-            'user',
-            'appointments' => function ($query) {
-                $currentDate = now()->toDateString();
-                $thresholdTime = now()->addHours(2)->addMinutes(30)->format('H:i:s');
-                $query->where(function ($q) use ($currentDate, $thresholdTime) {
-                    $q->whereDate('date', '>', $currentDate)
-                      ->orWhere(function ($subQuery) use ($currentDate, $thresholdTime) {
-                          $subQuery->whereDate('date', $currentDate)
-                                   ->whereRaw("TIME(end_time) > ?", [$thresholdTime]);
-                      });
-                });
-            },
-            'specialties'
-        ])->find($identifier); 
+    public function doctorInformation($identifier)
+    {
+        if (is_numeric($identifier)) {
+            $doctor = Doctor::with([
+                'user',
+                'appointments' => function ($query) {
+                    $currentDate = now()->toDateString();
+                    $thresholdTime = now()->addHours(2)->addMinutes(30)->format('H:i:s');
+                    $query->where(function ($q) use ($currentDate, $thresholdTime) {
+                        $q->whereDate('date', '>', $currentDate)
+                            ->orWhere(function ($subQuery) use ($currentDate, $thresholdTime) {
+                                $subQuery->whereDate('date', $currentDate)
+                                    ->whereRaw("TIME(end_time) > ?", [$thresholdTime]);
+                            });
+                    });
+                },
+                'specialties'
+            ])->find($identifier);
+        } else {
+            $user = User::where('slug', $identifier)->first();
+            if (!$user || !$user->doctor) {
+                return ApiResponse::sendResponse(404, 'Doctor not found', []);
+            }
 
-    } else {
-        $user = User::where('slug', $identifier)->first();
-        if (!$user || !$user->doctor) {
+            $doctor = Doctor::with([
+                'user',
+                'appointments' => function ($query) {
+                    $currentDate = now()->toDateString();
+                    $thresholdTime = now()->addHours(2)->addMinutes(30)->format('H:i:s');
+                    $query->where(function ($q) use ($currentDate, $thresholdTime) {
+                        $q->whereDate('date', '>', $currentDate)
+                            ->orWhere(function ($subQuery) use ($currentDate, $thresholdTime) {
+                                $subQuery->whereDate('date', $currentDate)
+                                    ->whereRaw("TIME(end_time) > ?", [$thresholdTime]);
+                            });
+                    });
+                },
+                'specialties'
+            ])->where('user_id', $user->id)->first();
+        }
+
+        if (!$doctor) {
             return ApiResponse::sendResponse(404, 'Doctor not found', []);
         }
 
-        $doctor = Doctor::with([
-            'user',
-            'appointments' => function ($query) {
-                $currentDate = now()->toDateString();
-                $thresholdTime = now()->addHours(2)->addMinutes(30)->format('H:i:s');
-                $query->where(function ($q) use ($currentDate, $thresholdTime) {
-                    $q->whereDate('date', '>', $currentDate)
-                      ->orWhere(function ($subQuery) use ($currentDate, $thresholdTime) {
-                          $subQuery->whereDate('date', $currentDate)
-                                   ->whereRaw("TIME(end_time) > ?", [$thresholdTime]);
-                      });
-                });
-            },
-            'specialties'
-        ])->where('user_id', $user->id)->first(); 
+        $data = new DoctorInfoResource($doctor);
+
+        return ApiResponse::sendResponse(
+            200,
+            'Doctor fetched successfully.',
+            $data
+        );
     }
 
-    if (!$doctor) {
-        return ApiResponse::sendResponse(404, 'Doctor not found', []);
-    }
 
-    $data = new DoctorInfoResource($doctor);
-
-    return ApiResponse::sendResponse(
-        200,
-        'Doctor fetched successfully.',
-        $data
-    );
-}
-
-   
     public function filterBySpecialty(Request $request)
     {
         $specialtyId = $request->input('specialty_id');
@@ -135,4 +135,3 @@ public function doctorInformation($identifier)
         return ApiResponse::sendResponse(400, 'Name parameter is required', []);
     }
 }
-
