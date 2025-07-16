@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AdminDashboard\RoleActivationController;
 use App\Http\Controllers\API\Authentication\GoogleRoleController;
 use App\Http\Controllers\Api\Authentication\OtpController;
 use App\Http\Controllers\Api\Profile\ProfileController;
@@ -100,10 +101,14 @@ Route::middleware(['throttle:apiRateLimit'])->group(function () {
     Route::middleware(['auth:sanctum'])->prefix('Specialties')->group(function () {
         Route::get('/show', [SpecialtyController::class, 'show']);
 
+
+
         Route::middleware(['role:admin'])->group(function () {
             Route::post('/storeSpecialty', [AdminSpecialtyController::class, 'store']);
             Route::put('/updateSpecialty/{id}', [AdminSpecialtyController::class, 'update']);
             Route::delete('/deleteSpecialty/{id}', [AdminSpecialtyController::class, 'destroy']);
+            Route::get('doctors/pending-activation', [RoleActivationController::class, 'pending']);
+            Route::patch('doctors/{id}/role-activation', [RoleActivationController::class, 'update']);
         });
     });
 

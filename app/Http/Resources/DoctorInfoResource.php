@@ -18,6 +18,7 @@ class DoctorInfoResource extends JsonResource
     {
          return [    
         'id' => $this->id,
+        'role_activation' => $this->role_activation,
         'slug' => $this->user->slug,
         'email_verified_at' => $this->user->email_verified_at ? $this->user->email_verified_at->format('Y-m-d H:i:s') : null,
         'fees' => $this->fees,
