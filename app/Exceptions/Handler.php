@@ -6,7 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Symfony\Component\HttpKernel\Exception\ThrottleRequestsException;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 
 class Handler extends ExceptionHandler
 {
@@ -32,8 +32,13 @@ class Handler extends ExceptionHandler
     }
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof ThrottleRequestsException) {
+            return new JsonResponse([
+                'message' => 'Too many requests, please slow down!',
+                'retry_after' => $exception->getHeaders()['Retry-After'] ?? 60,
+            ], 429);
+        }
 
-        // Handle Model Not Found (custom messages for specific models)
         if ($exception instanceof ModelNotFoundException) {
             $model = class_basename($exception->getModel());
 
