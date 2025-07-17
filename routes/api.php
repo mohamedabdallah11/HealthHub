@@ -52,7 +52,9 @@ Route::middleware(['throttle:apiRateLimit'])->group(function () {
         Route::post('/update', [ProfileController::class, 'update']);
         Route::put('/changePassword', [ProfileController::class, 'changePassword']);
         Route::get('users/slug/{slug}', [ProfileController::class, 'showBySlug']);
+        Route::delete('/delete-picture', [ProfileController::class, 'deleteProfilePicture']);
     });
+
     Route::controller(socialiteAuthenticationController::class)->prefix('auth')->group(function () {
         Route::get('/google', action: 'redirectToGoogle');
         Route::get('/google/callback', 'handleGoogleCallback');
@@ -100,9 +102,6 @@ Route::middleware(['throttle:apiRateLimit'])->group(function () {
 
     Route::middleware(['auth:sanctum'])->prefix('Specialties')->group(function () {
         Route::get('/show', [SpecialtyController::class, 'show']);
-
-
-
         Route::middleware(['role:admin'])->group(function () {
             Route::post('/storeSpecialty', [AdminSpecialtyController::class, 'store']);
             Route::put('/updateSpecialty/{id}', [AdminSpecialtyController::class, 'update']);
