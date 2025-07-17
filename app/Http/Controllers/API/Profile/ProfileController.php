@@ -71,5 +71,12 @@ class ProfileController extends Controller
             'user' => new ProfileResource($user)
         ]);
     }
-    
+    public function deleteProfilePicture()
+{
+    /** @var User $user */
+    $user = Auth::user();
+
+    return $this->profileService->deleteProfilePicture($user);
+}
+
 }

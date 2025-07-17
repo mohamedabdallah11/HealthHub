@@ -10,4 +10,7 @@ interface ProfileServiceInterface
     public function showProfile(User $user);
 
     public function updateProfile(ProfileUpdateRequest $request, User $user);
+
+    public function deleteProfilePicture(User $user);
+
 }

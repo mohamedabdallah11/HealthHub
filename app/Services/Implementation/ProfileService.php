@@ -78,4 +78,22 @@ class ProfileService implements ProfileServiceInterface
 
         return ApiResponse::sendResponse(200, 'Profile updated successfully', new ProfileResource($user));
     }
+
+    public function deleteProfilePicture(User $user)
+{
+    if (!$user) {
+        return ApiResponse::sendResponse(404, 'User not found', []);
+    }
+
+    if ($user->role === 'doctor' && $user->doctor && $user->doctor->image) {
+        Storage::delete(str_replace('storage/', 'public/', $user->doctor->image));
+
+        $user->doctor->update(['image' => null]);
+
+        return ApiResponse::sendResponse(200, 'Profile picture deleted successfully', []);
+    }
+
+    return ApiResponse::sendResponse(400, 'No profile picture to delete', []);
+}
+
 }
